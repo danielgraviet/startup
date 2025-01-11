@@ -38,34 +38,50 @@ CatNip Messaging isn't just another chat app, it is a community for cat lovers!
 - Login Feature
     - users are shown a random cat fact, or funny cat gif. 
 - Real-Time Messaging
-    - you can chat with others
+    - you can chat with others in real time using WebSocket Technology
+    - "Cat Typing..." indicator shows that someone is typing
+- Special reactions
+    - "paw-up" or "paw-down" emojis.
+- Authentication
+    - regiser users and login with a special cat avatar.
+    - store data in a private database.
+- Fun Easter Eggs
+    - Typing "meow" triggers a special animation.
+- Dynamic view
+    - Using react, there is a login form, chat window, and online user list. 
+- Cat API
+    - shows random at images and facts for user retention. 
+- Community Building
+    - This is desinged to create an enjoyable space that people that like cats can connect.
+- Data Insights
+    - tracks most liked messages to follow current trends in the community. 
 
 ## Description of Technology
 CatNip Messaging Website
-    - HTML - Two main pages
-        - Login Page
-        - Messagin Page
-        - Hyperlink to reset password. 
-    - CSS
-        - incorporate cat themes throughout
-        - Buttons that “purr” (vibrate) on hover. 
-        - Cursor is a paw icon. 
-        - Cat inspired colors, warm tones, furr colors. 
-    - JavaScript
-        - On login, show a random cat fact, or cat gif. Use The Cat API.
-        - Easter egg, when users type meow like a surprise animation. 
-        - Users can react to messages with paw-up/paw-down
-    - React 
-        - different views like login form, chat window, and online user list. 
-        - Web Service
-        - use The Cat API to get cat images, and random facts. Message API will add messages to the database and then show them to different users. 
-    - Authentication
-        - register and login users, store their information in a database. Have to login to start chatting. 
-    - Database data
-        - Safely stores the user login information like cat avatar, username, password etc. 
-        - Track reactions to most “paw-up” message and “paw-down”
-    - WebSocket data
-        - Show real-time communication. 
-        - Users react with the paw-up/paw-down, real time typing like “Cat Typing…”
+- HTML - Two main pages
+    - Login Page
+    - Messagin Page
+    - Hyperlink to reset password. 
+- CSS
+    - incorporate cat themes throughout
+    - Buttons that “purr” (vibrate) on hover. 
+    - Cursor is a paw icon. 
+    - Cat inspired colors, warm tones, furr colors. 
+- JavaScript
+    - On login, show a random cat fact, or cat gif. Use The Cat API.
+    - Easter egg, when users type meow like a surprise animation. 
+    - Users can react to messages with paw-up/paw-down
+- React 
+    - different views like login form, chat window, and online user list. 
+    - Web Service
+    - use The Cat API to get cat images, and random facts. Message API will add messages to the database and then show them to different users. 
+- Authentication
+    - register and login users, store their information in a database. Have to login to start chatting. 
+- Database data
+    - Safely stores the user login information like cat avatar, username, password etc. 
+    - Track reactions to most “paw-up” message and “paw-down”
+- WebSocket data
+    - Show real-time communication. 
+    - Users react with the paw-up/paw-down, real time typing like “Cat Typing…”
 
 ## Rough Sketch
