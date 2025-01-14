@@ -49,7 +49,7 @@ sequenceDiagram
 ### Key features
 
 - Login Feature
-    - users are shown a random cat fact, or funny cat gif. 
+    - users are shown a random cat fact, or funny cat gif after entering user name and password.
 - Real-Time Messaging
     - you can chat with others in real time using WebSocket Technology
     - "Cat Typing..." indicator shows that someone is typing
@@ -85,7 +85,7 @@ I am going to use the required technologies in the following ways.
     - Cat inspired colors, warm tones, furr colors. 
 - **React** 
     - different views like login form, chat window, and online user list. 
-    - Web Service
+    - use state hooks and other features to track user interactivity. 
     - use The Cat API to get cat images, and random facts. Message API will add messages to the database and then show them to different users. 
 - **Service** 
    - Allow users to message eachother in real time, share images, files, and videos. 
