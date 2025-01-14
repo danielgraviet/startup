@@ -25,7 +25,13 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+CatNip Messaging! It's a playful and cat-themed messaging platform for all the feline fans out there.
+It is built with a focus on simplicity and usability. Users log in to discover new facts or see funny gifs from The Cat API.
+Users are able to chat in real time using WebSocket technology and can even react to other messages with a "paw-up" or "paw-down" feature.
+The main design includes warm cat inspired colors, a cursor that is a paw, and buttons that "purr" when hovered over. 
+This brings back the joy to messaging and makes chatting with friends immersive and fun.
+It also has secure authentication, personalized cat avatars, and a database that tracks the most liked messages.
+CatNip Messaging isn't just another chat app, it is a community for cat lovers!
 
 ### Design
 
