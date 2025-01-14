@@ -24,7 +24,7 @@ CatNip Messaging isn't just another chat app, it is a community for cat lovers!
 
 ### Design
 
-![Design image](IMG_0934.png)
+![Design image](mockup.png)
 
 CatNip Messaging has a Slack-inspired design with a sidebar on the left for navigation, displaying chat rooms, user lists, and settings, with a cat-themed logo. The main area displays messages against and has a cat themed background with custom graphics. It also includes a display to show random cat facts. At the bottom, a long text box lets users type messages, attach files or photos, and use emojis, all with cat-themed icons. In addition there are warm, natural tones and animations create a fun look!
 
