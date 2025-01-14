@@ -85,3 +85,4 @@ CatNip Messaging Website
     - Users react with the paw-up/paw-down, real time typing like “Cat Typing…”
 
 ## Rough Sketch
+![My Image](IMG_0934.png)
