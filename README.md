@@ -1,9 +1,8 @@
-# Your startup name here
+# Catnip Messaging
 
 [My Notes](notes.md)
 
-A brief description of the application here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+CatNip Messaging is a cat-themed chat platform for feline fans. There is real-time messaging, fun "paw-up" reactions, cat facts, and gifs, all with a cozy, cat-inspired design. It also includes secure login, personalized avatars, and a community vibe, it's more than a chat app—it's a haven for cat enthusiasts!
 
 > [!NOTE]
 >  This is a template for your startup application. You must modify this `README.md` file for each phase of your development. You only need to fill in the section for each deliverable when that deliverable is submitted in Canvas. Without completing the section for a deliverable, the TA will not know what to look for when grading your submission. Feel free to add additional information to each deliverable description, but make sure you at least have the list of rubric items and a description of what you did for each item.
@@ -30,9 +29,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ### Design
 
-![Design image](placeholder.png)
+![Design image](IMG_0934.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+CatNip Messaging has a Slack-inspired design with a sidebar on the left for navigation, displaying chat rooms, user lists, and settings, with a cat-themed logo. The main area displays messages against and has a cat themed background with custom graphics. It also includes a display to show random cat facts. At the bottom, a long text box lets users type messages, attach files or photos, and use emojis, all with cat-themed icons. In addition there are warm, natural tones and animations create a fun look!
 
 ```mermaid
 sequenceDiagram
@@ -43,20 +42,56 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Login Feature
+    - users are shown a random cat fact, or funny cat gif. 
+- Real-Time Messaging
+    - you can chat with others in real time using WebSocket Technology
+    - "Cat Typing..." indicator shows that someone is typing
+- Special reactions
+    - "paw-up" or "paw-down" emojis.
+- Authentication
+    - regiser users and login with a special cat avatar.
+    - store data in a private database.
+- Fun Easter Eggs
+    - Typing "meow" triggers a special animation.
+- Dynamic view
+    - Using react, there is a login form, chat window, and online user list. 
+- Cat API
+    - shows random at images and facts for user retention. 
+- Community Building
+    - This is desinged to create an enjoyable space that people that like cats can connect.
+- Data Insights
+    - tracks most liked messages to follow current trends in the community. 
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** 
+    - Two main pages
+    - Login Page
+    - Messagin Page
+    - Hyperlink to reset password. 
+- **CSS** 
+    - incorporate cat themes throughout
+    - Buttons that “purr” (vibrate) on hover. 
+    - Cursor is a paw icon. 
+    - Cat inspired colors, warm tones, furr colors. 
+- **React** 
+    - different views like login form, chat window, and online user list. 
+    - Web Service
+    - use The Cat API to get cat images, and random facts. Message API will add messages to the database and then show them to different users. 
+- **Service** 
+   - Allow users to message eachother in real time, share images, files, and videos. 
+   - connect with other community members. 
+- **DB/Login** 
+    - register and login users, store their information in a database. Have to login to start chatting.
+    - Safely stores the user login information like cat avatar, username, password etc. 
+    - Track reactions to most “paw-up” message and “paw-down” 
+- **WebSocket** 
+    - Show real-time communication. 
+    - Users react with the paw-up/paw-down, real time typing like “Cat Typing…”
+
 
 ## 🚀 AWS deliverable
 
