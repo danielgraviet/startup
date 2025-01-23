@@ -60,7 +60,7 @@ CatNip Messaging isn't just another chat app, it is a community for cat lovers!
 CatNip Messaging Website
 - HTML - Two main pages
     - Login Page
-    - Messagin Page
+    - Messaging Page
     - Hyperlink to reset password. 
 - CSS
     - incorporate cat themes throughout

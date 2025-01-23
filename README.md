@@ -98,15 +98,15 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [X] **HTML pages** - I did not complete this part of the deliverable.
-- [X] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [X] **Links** - I did not complete this part of the deliverable.
-- [X] **Text** - I did not complete this part of the deliverable.
-- [X] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [X] **Images** - I did not complete this part of the deliverable.
-- [X] **Login placeholder** - I did not complete this part of the deliverable.
-- [X] **DB data placeholder** - I did not complete this part of the deliverable.
-- [X] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [X] **HTML pages** - Login, Messaging, Developer, Cat Fact pages. 
+- [X] **Proper HTML element usage** - I used Headers, Nav, Footers, and Main throughout the different pages. 
+- [X] **Links** - Added link to my Github at the login page.
+- [X] **Text** - Added relevant text. 
+- [X] **3rd party API placeholder** - This is found when you login, then navigate to the Cat Facts Channel. This is a placeholder.
+- [X] **Images** - Main logo on the landing page .
+- [X] **Login placeholder** - Input boxes for username and password. 
+- [X] **DB data placeholder** - Navigate to the developer button at the bottom of the main page. 
+- [X] **WebSocket placeholder** - After login, the main messaging box will eventually show real-time messages. 
 
 ## 🚀 CSS deliverable
 
