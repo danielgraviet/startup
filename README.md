@@ -102,7 +102,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [X] **Proper HTML element usage** - I did not complete this part of the deliverable.
 - [X] **Links** - I did not complete this part of the deliverable.
 - [X] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
+- [X] **3rd party API placeholder** - I did not complete this part of the deliverable.
 - [X] **Images** - I did not complete this part of the deliverable.
 - [X] **Login placeholder** - I did not complete this part of the deliverable.
 - [ ] **DB data placeholder** - I did not complete this part of the deliverable.
