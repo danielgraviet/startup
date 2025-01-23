@@ -106,7 +106,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [X] **Images** - I did not complete this part of the deliverable.
 - [X] **Login placeholder** - I did not complete this part of the deliverable.
 - [X] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [X] **WebSocket placeholder** - I did not complete this part of the deliverable.
 
 ## 🚀 CSS deliverable
 
