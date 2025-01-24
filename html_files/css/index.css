@@ -29,11 +29,22 @@
 }
 
 .nav-left {
-    width: 200px;
-    /* Fixed width to match nav-right */
+    flex: 0 0 200px;
+    /* Fixed width */
 }
 
 .nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-right {
+    flex: 0 0 200px;
+    /* Fixed width to match nav-left */
+}
+
+.nav-center ul {
     display: flex;
     gap: 2rem;
     margin: 0;
@@ -42,20 +53,28 @@
     justify-content: center;
 }
 
-.nav-right {
-    width: 200px;
-    /* Fixed width to match nav-left */
+.nav-center li {
+    display: inline-flex;
+}
+
+.nav-center li a {
+    color: #202123;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.nav-center li a:hover {
+    background-color: transparent;
+    color: #666;
 }
 
 .navbar img {
     height: 32px;
-    /* Sets logo height */
     width: auto;
-    /* Maintains logo aspect ratio */
     margin-right: 2rem;
-    /* Adds space between logo and navigation */
-    flex-shrink: 0;
-    /* Prevents logo from shrinking */
 }
 
 /* Optional: Add space below fixed navbar to avoid overlap */
@@ -84,22 +103,4 @@ body {
     /* Same as logo margin-right */
     visibility: hidden;
     /* Makes it invisible but maintains space */
-}
-
-.nav-center li {
-    display: inline-flex;
-}
-
-.nav-center li a {
-    color: #202123;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 0;
-    transition: color 0.2s ease;
-}
-
-.nav-center li a:hover {
-    background-color: transparent;
-    color: #666;
 }
