@@ -1,0 +1,54 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: grey;
+    color: white;
+    z-index: 1000;
+    padding: 0.5rem 1rem; /* Add some padding around the navbar */
+    display: flex;
+    align-items: center; /* Vertically align items */
+    justify-content: space-between; /* Space out the logo and navigation items */
+}
+
+.navbar ul {
+    display: flex;
+    gap: 1rem; /* Add spacing between list items */
+    margin: 0;
+    padding: 0;
+    list-style: none; /* Remove default bullet points */
+}
+
+.navbar li {
+    display: inline-flex;/* Ensure list items are inline */
+}
+
+.navbar li a {
+    color: white;
+    text-decoration: none; /* Remove underline */
+    font-size: 0.9rem; /* Adjust font size */
+    padding: 0.5rem 0.75rem; /* Add some padding around the links */
+    border-radius: 5px; /* Optional rounded corners for better appearance */
+    transition: background-color 0.3s; /* Smooth hover effect */
+}
+
+.navbar li a:hover {
+    background-color: #555; /* Highlight on hover */
+}
+
+.navbar img {
+    height: 40px; /* Adjust logo height */
+    width: auto; /* Maintain aspect ratio */
+    margin-right: 1rem; /* Space between logo and nav items */
+}
+
+/* Optional: Add space below fixed navbar to avoid overlap */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#login-container {
+    margin-top: 60px; /* Adjust based on navbar height */
+}
