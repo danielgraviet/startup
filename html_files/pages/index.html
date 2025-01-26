@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CatNip Messaging</title>
-  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="../css/index.css">
 </head>
 
 <body>
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="nav-left">
-      <img src="../images/logo.png" alt="Logo">
+      <img src="../../images/logo.png" alt="Logo">
     </div>
     <div class="nav-center">
       <ul>
@@ -36,7 +36,7 @@
     </header>
 
     <!-- Login Form -->
-    <form id="login-form" action="/login" method="POST">
+    <form id="login-form" action="messages.html" method="GET">
       <!-- Username Input -->
       <div class="form-group">
         <label for="username">Enter Username:</label>
@@ -57,17 +57,16 @@
 
       <!-- Submit Button -->
       <div class="form-group">
-        <button type="submit"><a href="messages.html">Sign In</a></button>
+        <button type="submit" class="button">Sign In</button>
       </div>
 
       <div class="form-group">
-        <button type="submit">Create Account</button>
+        <a href="signup.html" class="button">Create Account</a>
       </div>
     </form>
 
     <!-- Footer -->
     <footer id="additional-links">
-      <p><a href="/forgot-password">Forgot your password?</a></p>
       <p><a href="signup.html">Create an account</a></p>
       <p><a href="https://github.com/danielgraviet/startup">GitHub</a></p>
       <p><a href="private.html">For Developers</a></p>
