@@ -17,7 +17,7 @@
         <div class="nav-center">
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="messages.html">Login</a></li>
+                <li><a href="messages.html">Messsages</a></li>
                 <li><a href="signup.html">Sign Up</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -28,6 +28,7 @@
 
     <div>
         <h1>CatNip Messaging</h1>
+        <h2>Welcome, <span id="user-name">User</span>!</h2>
         <aside>
             <button>Channel 1</button>
             <button>Channel 2</button>
@@ -48,6 +49,16 @@
         </div>
 
     </div>
+
+    <script>
+        // Display the username when the messages page loads
+        window.onload = function () {
+            const username = localStorage.getItem("username");
+            if (username) {
+                document.getElementById("user-name").textContent = username;
+            }
+        };
+    </script>
 </body>
 
 </html>

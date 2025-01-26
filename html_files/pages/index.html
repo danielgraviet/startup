@@ -17,7 +17,7 @@
     <div class="nav-center">
       <ul>
         <li><a href="index.html">Home</a></li>
-        <li><a href="messages.html">Login</a></li>
+        <li><a href="messages.html">Messsages</a></li>
         <li><a href="signup.html">Sign Up</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -36,7 +36,7 @@
     </header>
 
     <!-- Login Form -->
-    <form id="login-form" action="messages.html" method="GET">
+    <form id="login-form" action="messages.html" method="GET" onsubmit="return saveUserName()">
       <!-- Username Input -->
       <div class="form-group">
         <label for="username">Enter Username:</label>
@@ -73,5 +73,13 @@
     </footer>
   </div>
 </body>
+
+<script>
+  function saveUserName() {
+    const username = document.getElementById("username").value;
+    localStorage.setItem("username", username);
+    return true; // Allow form submission to continue
+  }
+</script>
 
 </html>
