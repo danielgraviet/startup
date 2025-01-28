@@ -84,7 +84,6 @@ h1 {
     font-weight: bold;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     margin: 0;
-    color: red;
     /* Reset default margins */
 }
 
@@ -104,8 +103,7 @@ h2 {
     margin-right: auto;
     display: flex;
     min-height: calc(100vh - 72px);
-    background-color: white;
-    color: white;
+    background-color: #fbf7e9;
 }
 
 .signup-left {
@@ -119,7 +117,7 @@ h2 {
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    background-color: #2a2a35;
+    background-color: white;
 }
 
 .signup-right {
@@ -127,38 +125,57 @@ h2 {
     padding: 3rem;
     display: flex;
     flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    align-items: center;
+    /* Center the content horizontally */
+}
+
+/* Add a form container to control width */
+#signup-form {
+    width: 100%;
+    /* Fixed width for the form */
+    max-width: 100%;
+    /* Ensure it's responsive */
 }
 
 .signup-right h1 {
     font-size: 3.5rem;
     font-weight: 500;
     margin-bottom: 1rem;
-    color: white;
+    color: black;
+    width: 100%;
+    max-width: 100%;
 }
 
 .login-link {
     color: #9ca3af;
     margin-bottom: 2rem;
+    width: 100%;
+    max-width: 100%;
 }
 
 .login-link a {
-    color: #8b5cf6;
+    color: #f7931e;
     text-decoration: none;
     margin-left: 0.5rem;
 }
 
 .form-group {
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .form-group input {
     width: 100%;
+    box-sizing: border-box;
+    /* Ensure padding doesn't add to width */
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid #374151;
-    background-color: #2a2a35;
-    color: white;
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    color: #1f2937;
     margin-top: 0.5rem;
+    font-size: 1rem;
 }
 
 .form-group input::placeholder {
@@ -178,52 +195,26 @@ h2 {
 }
 
 .checkbox-group a {
-    color: #8b5cf6;
+    color: #f7931e;
     text-decoration: none;
 }
 
 .signup-button {
     width: 100%;
+    box-sizing: border-box;
+    /* Ensure padding doesn't add to width */
     padding: 0.75rem;
-    background-color: #8b5cf6;
+    background-color: #f7931e;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     margin-bottom: 2rem;
+    transition: all 0.2s ease;
 }
 
 .signup-button:hover {
-    background-color: #7c3aed;
-}
-
-.social-signup {
-    text-align: center;
-    color: #9ca3af;
-    margin-bottom: 2rem;
-}
-
-.social-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.social-button {
-    flex: 1;
-    padding: 0.75rem;
-    border: 1px solid #374151;
-    border-radius: 8px;
-    background-color: transparent;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    cursor: pointer;
-}
-
-.social-button:hover {
-    background-color: #2a2a35;
+    background-color: #eaceae;
+    transform: translateY(-2px);
 }
