@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - CatNip Messaging</title>
-  <link rel="stylesheet" href="../css/index.css">
+  <title>Create Account - CatNip</title>
+  <link rel="stylesheet" href="../css/signup.module.css">
   <link rel="icon" type="image/x-icon" href="../../assets/logo.png">
 </head>
 
@@ -26,28 +26,39 @@
     <div class="nav-right"></div>
   </nav>
 
-  <div id="signup-container">
+  <div class="signup-container">
+    <div class="signup-left">
+      <!-- Background image will be set in CSS -->
+    </div>
+    <div class="signup-right">
+      <h1>Create an account</h1>
+      <p class="login-link">
+        Already have an account?<a href="../../index.html">Log in</a>
+      </p>
 
-    <h1>CatNip Messaging</h1>
-    <h2>Create Account</h2>
-    <form id="signup-form" action="messages.html" method="GET">
-      <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+      <form id="signup-form" action="messages.html" method="GET">
+        <div class="form-group">
+          <input type="text" id="firstname" name="firstname" placeholder="First name" required>
+        </div>
+        <div class="form-group">
+          <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" id="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="password" name="password" placeholder="Password" required>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+        </div>
+
+        <button type="submit" class="signup-button">Create account</button>
+      </form>
       </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <div class="form-group">
-        <button type="submit">Sign Up</button>
-      </div>
-    </form>
-    <a href="../../index.html">Back to Login</a>
+    </div>
   </div>
 </body>
 

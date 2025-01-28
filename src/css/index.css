@@ -105,18 +105,44 @@ body {
     /* Makes it invisible but maintains space */
 }
 
+.button-group {
+    display: flex;
+    gap: 1rem;
+    /* Space between buttons */
+    justify-content: center;
+    margin-top: 1rem;
+}
+
 .button {
     display: inline-block;
     padding: 0.5rem 1rem;
-    margin-bottom: 1rem;
     background-color: #007bff;
     color: white;
     text-decoration: none;
     border-radius: 4px;
     border: none;
     cursor: pointer;
+    /* Remove margin-bottom since we're handling spacing in button-group */
 }
 
 .button:hover {
     background-color: #0056b3;
+}
+
+.titlebox {
+    display: flex;
+    justify-self: right;
+    padding: 1rem;
+    flex-direction: column;
+    border-style: solid;
+    border-color: #000000;
+}
+
+.formbox {
+    display: flex;
+    justify-self: right;
+    padding: 1rem;
+    flex-direction: column;
+    border-style: solid;
+    border-color: #000000;
 }

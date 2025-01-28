@@ -1,0 +1,229 @@
+.navbar {
+    position: fixed;
+    /* Keeps navbar stuck to top of screen while scrolling */
+    top: 0;
+    /* Aligns navbar to top edge of viewport */
+    left: 0;
+    /* Aligns navbar to left edge of viewport */
+    width: 100%;
+    /* Makes navbar span full width of viewport */
+    background-color: white;
+    /* Sets navbar background to white */
+    color: #202123;
+    /* Sets default text color to dark grey */
+    z-index: 1000;
+    /* Ensures navbar stays on top of other content */
+    padding: 0.75rem 2rem;
+    /* Adds internal spacing: 0.75rem top/bottom, 2rem left/right */
+    display: flex;
+    /* Enables flexbox layout for navbar contents */
+    align-items: center;
+    /* Vertically centers items in the navbar */
+    justify-content: space-between;
+    /* Change from flex-start to space-between */
+    /* This will create better spacing between logo, links, and right side */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Adds subtle bottom border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    /* Adds subtle shadow for depth */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.nav-left {
+    flex: 0 0 200px;
+    /* Fixed width */
+}
+
+.nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-right {
+    flex: 0 0 200px;
+    /* Fixed width to match nav-left */
+}
+
+.nav-center ul {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+}
+
+.nav-center li {
+    display: inline-flex;
+}
+
+.nav-center li a {
+    color: #202123;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.nav-center li a:hover {
+    background-color: transparent;
+    color: #666;
+}
+
+.navbar img {
+    height: 32px;
+    width: auto;
+    margin-right: 2rem;
+}
+
+h1 {
+    padding-top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0;
+    color: red;
+    /* Reset default margins */
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin-top: 1rem;
+    /* Add some space between headings */
+}
+
+/* Add this to create a container for the content */
+.signup-container {
+    margin-top: 72px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    min-height: calc(100vh - 72px);
+    background-color: white;
+    color: white;
+}
+
+.signup-left {
+    flex: 1;
+    background-image: url('../../assets/orangecat.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background-color: #2a2a35;
+}
+
+.signup-right {
+    flex: 1;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-right h1 {
+    font-size: 3.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.login-link {
+    color: #9ca3af;
+    margin-bottom: 2rem;
+}
+
+.login-link a {
+    color: #8b5cf6;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background-color: #2a2a35;
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.form-group input::placeholder {
+    color: #9ca3af;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group label {
+    color: #9ca3af;
+    font-size: 0.875rem;
+}
+
+.checkbox-group a {
+    color: #8b5cf6;
+    text-decoration: none;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8b5cf6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.signup-button:hover {
+    background-color: #7c3aed;
+}
+
+.social-signup {
+    text-align: center;
+    color: #9ca3af;
+    margin-bottom: 2rem;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-button {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    background-color: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.social-button:hover {
+    background-color: #2a2a35;
+}
