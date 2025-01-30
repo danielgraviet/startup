@@ -263,3 +263,127 @@ body {
     border-radius: 8px;
     border: 1px solid #e5e7eb;
 }
+
+/* Add these media queries at the end of your existing CSS */
+
+/* For tablets and smaller desktop screens */
+@media (max-width: 1024px) {
+    .content-wrapper {
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .hero-left {
+        margin-left: 0;
+        /* Remove negative margin on smaller screens */
+        max-width: 500px;
+    }
+
+    .hero-right {
+        margin-right: 0;
+        width: 55%;
+        /* Slightly smaller image */
+    }
+
+    .hero-title {
+        font-size: 2.8rem;
+        /* Slightly smaller title */
+    }
+}
+
+/* For tablets and large mobile devices */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+        /* Stack content vertically */
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .hero-left {
+        max-width: 100%;
+        padding: 1.5rem;
+        background-color: rgba(255, 255, 255, 0.95);
+        /* More opaque background */
+    }
+
+    .hero-right {
+        position: fixed;
+        /* Fix image to background */
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        z-index: -1;
+        /* Place behind content */
+    }
+
+    .hero-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: rotate(0);
+        /* Remove rotation on mobile */
+        opacity: 0.3;
+        /* Make image more subtle */
+    }
+
+    .form-group input {
+        max-width: 100%;
+    }
+
+    .button-group {
+        flex-direction: column;
+        /* Stack buttons on mobile */
+        align-items: center;
+    }
+
+    .primary-button {
+        width: 100%;
+        /* Full width buttons on mobile */
+        max-width: 300px;
+    }
+}
+
+/* For small mobile devices */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .nav-center ul {
+        gap: 1rem;
+        /* Reduce gap between nav items */
+    }
+
+    .nav-center li a {
+        font-size: 0.8rem;
+        /* Smaller font for nav items */
+    }
+
+    .navbar {
+        padding: 0.5rem 1rem;
+        /* Smaller padding in navbar */
+    }
+
+    .navbar img {
+        height: 24px;
+        /* Smaller logo */
+    }
+}
+
+/* Fix for very small devices */
+@media (max-width: 320px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+
+    .form-group input,
+    .primary-button {
+        padding: 0.5rem;
+    }
+}
