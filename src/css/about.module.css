@@ -1,0 +1,210 @@
+.navbar {
+    position: fixed;
+    /* Keeps navbar stuck to top of screen while scrolling */
+    top: 0;
+    /* Aligns navbar to top edge of viewport */
+    left: 0;
+    /* Aligns navbar to left edge of viewport */
+    width: 100%;
+    /* Makes navbar span full width of viewport */
+    background-color: white;
+    /* Sets navbar background to white */
+    color: #202123;
+    /* Sets default text color to dark grey */
+    z-index: 1000;
+    /* Ensures navbar stays on top of other content */
+    padding: 0.75rem 2rem;
+    /* Adds internal spacing: 0.75rem top/bottom, 2rem left/right */
+    display: flex;
+    /* Enables flexbox layout for navbar contents */
+    align-items: center;
+    /* Vertically centers items in the navbar */
+    justify-content: space-between;
+    /* Change from flex-start to space-between */
+    /* This will create better spacing between logo, links, and right side */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Adds subtle bottom border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    /* Adds subtle shadow for depth */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.nav-left {
+    flex: 0 0 200px;
+    /* Fixed width */
+}
+
+.nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-right {
+    flex: 0 0 200px;
+    /* Fixed width to match nav-left */
+}
+
+.nav-center ul {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+}
+
+.nav-center li {
+    display: inline-flex;
+}
+
+.nav-center li a {
+    color: #202123;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.nav-center li a:hover {
+    background-color: transparent;
+    color: #666;
+}
+
+.navbar img {
+    height: 32px;
+    width: auto;
+    margin-right: 2rem;
+}
+
+h1 {
+    padding-top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0;
+    /* Reset default margins */
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin-top: 1rem;
+    /* Add some space between headings */
+}
+
+body {
+    background-color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* About Page Styles */
+.about-container {
+    max-width: 1200px;
+    margin: 72px auto 0; /* Added top margin to account for navbar */
+    padding: 40px 20px;
+}
+
+.about-header {
+    margin-bottom: 60px;
+}
+
+.about-header h1 {
+    font-size: 4rem;
+    color: #1a1a3a;
+    margin-bottom: 30px;
+}
+
+.about-header p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+}
+
+.hero-image {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 20px;
+    margin-bottom: 80px;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.values-section {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.values-section h2 {
+    font-size: 3rem;
+    color: #1a1a3a;
+    margin-bottom: 50px;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.value-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.value-icon img {
+    width: 50px;
+    height: 50px;
+}
+
+.value-icon.green { background-color: #c5e1a5; }
+.value-icon.purple { background-color: #d1c4e9; }
+.value-icon.orange { background-color: #ffe0b2; }
+.value-icon.blue { background-color: #b3e5fc; }
+
+.value-card h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-top: 15px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .about-header h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-header h1 {
+        font-size: 2.5rem;
+    }
+}
