@@ -1,0 +1,468 @@
+.navbar {
+    position: fixed;
+    /* Keeps navbar stuck to top of screen while scrolling */
+    top: 0;
+    /* Aligns navbar to top edge of viewport */
+    left: 0;
+    /* Aligns navbar to left edge of viewport */
+    width: 100%;
+    /* Makes navbar span full width of viewport */
+    background-color: white;
+    /* Sets navbar background to white */
+    color: #202123;
+    /* Sets default text color to dark grey */
+    z-index: 1000;
+    /* Ensures navbar stays on top of other content */
+    padding: 0.75rem 2rem;
+    /* Adds internal spacing: 0.75rem top/bottom, 2rem left/right */
+    display: flex;
+    /* Enables flexbox layout for navbar contents */
+    align-items: center;
+    /* Vertically centers items in the navbar */
+    justify-content: space-between;
+    /* Change from flex-start to space-between */
+    /* This will create better spacing between logo, links, and right side */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* Adds subtle bottom border */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    /* Adds subtle shadow for depth */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.nav-left {
+    flex: 0 0 200px;
+    /* Fixed width */
+}
+
+.nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-right {
+    flex: 0 0 200px;
+    /* Fixed width to match nav-left */
+}
+
+.nav-center ul {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    justify-content: center;
+}
+
+.nav-center li {
+    display: inline-flex;
+}
+
+.nav-center li a {
+    color: #202123;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s ease;
+}
+
+.nav-center li a:hover {
+    background-color: transparent;
+    color: #666;
+}
+
+.navbar img {
+    height: 32px;
+    width: auto;
+    margin-right: 2rem;
+}
+
+body {
+    margin: 0;
+    /* Removes default body margin */
+    padding: 0;
+    /* Removes default body padding */
+    background-color: #fff;
+    /* Sets page background to white */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    /* Above line sets system fonts for better typography across different operating systems */
+}
+
+h1 {
+    padding-top: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin: 0;
+    /* Reset default margins */
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    margin-top: 1rem;
+    /* Add some space between headings */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Keep existing navbar styles */
+
+.messages-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    height: calc(100vh - 72px);
+    margin-top: 72px;
+    background-color: #f8f9fa;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Left Sidebar Styles */
+.channels-sidebar {
+    background-color: white;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.search-container {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.channels-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.section-header {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 16px 0 8px;
+}
+
+.channel-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    gap: 12px;
+    transition: background-color 0.2s;
+}
+
+.channel-button:hover {
+    background-color: #f3f4f6;
+}
+
+.channel-button.active {
+    background-color: #f3f4f6;
+}
+
+.channel-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.channel-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.channel-name {
+    font-weight: 600;
+    color: #111827;
+}
+
+.channel-status {
+    font-size: 0.875rem;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Main Chat Area Styles */
+.chat-area {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.chat-title h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.action-button {
+    padding: 8px;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.action-button:hover {
+    background-color: #f3f4f6;
+}
+
+.action-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.message {
+    display: flex;
+    gap: 12px;
+    max-width: 80%;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message-content {
+    flex: 1;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.message-author {
+    font-weight: 600;
+    color: #111827;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.message-text {
+    color: #374151;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Message input styles */
+.message-input-container {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+}
+
+.message-input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    resize: none;
+}
+
+.message-input:focus {
+    outline: none;
+    border-color: #f7931e;
+    box-shadow: 0 0 0 2px rgba(247, 147, 30, 0.1);
+}
+
+.send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f7931e;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.send-button:hover {
+    background-color: #e88b1b;
+}
+
+.send-button img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+/* Right Sidebar Styles */
+.info-sidebar {
+    background-color: white;
+    border-left: 1px solid #e5e7eb;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.group-info h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 24px;
+}
+
+.info-section {
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-section:last-child {
+    border-bottom: none;
+}
+
+.info-section h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+/* Member List Styles */
+.member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.member-name {
+    font-size: 0.875rem;
+    color: #111827;
+}
+
+/* Created Date Styles */
+.created-date {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+/* Cat Fact Styles */
+.cat-fact {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.fact-text {
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.refresh-fact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #f7931e;
+    color: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.refresh-fact:hover {
+    background-color: #e88b1b;
+}
+
+.refresh-icon {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .messages-container {
+        grid-template-columns: 280px 1fr;
+    }
+
+    .info-sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .messages-container {
+        grid-template-columns: 1fr;
+    }
+
+    .channels-sidebar {
+        display: none;
+    }
+}
