@@ -26,7 +26,6 @@
     /* Adds subtle bottom border */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     /* Adds subtle shadow for depth */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 .nav-left {
@@ -76,6 +75,34 @@
     height: 32px;
     width: auto;
     margin-right: 2rem;
+}
+
+/* Optional: Add space below fixed navbar to avoid overlap */
+body {
+    margin: 0;
+    /* Removes default body margin */
+    padding: 0;
+    /* Removes default body padding */
+    background-color: #fff;
+    /* Sets page background to white */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    /* Above line sets system fonts for better typography across different operating systems */
+}
+
+#login-container {
+    margin-top: 72px;
+    /* Pushes content below fixed navbar to prevent overlap */
+}
+
+/* Add this new class for right side spacing */
+.navbar::after {
+    content: '';
+    width: 32px;
+    /* Same as logo width */
+    margin-left: 2rem;
+    /* Same as logo margin-right */
+    visibility: hidden;
+    /* Makes it invisible but maintains space */
 }
 
 h1 {
