@@ -115,9 +115,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [X] **Header, footer, and main content body** - I added styles to the header, footer, and main content body. I wanted to make the header and footer sticky and the main content body to be the main content. I liked OpenAi's navbar and wanted to make something similar. 
 - [X] **Navigation elements** - Using inspiration from other popular sites, I did a classic navbar at the top, that is sticky, with the logo on the far left. I chose a white color for easy visibilty. 
 - [X] **Responsive to window resizing** - For this part, I made the navbar, message page, about page, and contact page all responsive to different screen sizes. This included removing images, resizing channel boxes, and other changes that I felt were necessary while mainting usability. 
-- [ ] **Application elements** - I did not complete this part of the deliverable.
-- [ ] **Application text content** - I did not complete this part of the deliverable.
-- [ ] **Application images** - I did not complete this part of the deliverable.
+- [X] **Application elements** - I added a text message box, channel navigation, login form, and other elements to the pages. 
+- [X] **Application text content** - I implemented the text content for the landing page, about page, and contact page. 
+- [X] **Application images** - I added images to the landing page, about page, and contact page. 
 
 ## 🚀 React part 1: Routing deliverable
 
