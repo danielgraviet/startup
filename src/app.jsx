@@ -8,15 +8,9 @@ import { About } from './pages/about';
 import { Login } from './pages/login';
 import { Messages } from './pages/messages';
 import { Contact } from './pages/contact';
+import { CreateAccount } from './pages/createAccount';
 
 export default function App() {
-    const saveUserName = () => {
-        const username = document.getElementById("username").value;
-        localStorage.setItem("username", username);
-        return true;
-    };
-
-    
     return (
         <BrowserRouter>
             <>
@@ -35,15 +29,12 @@ export default function App() {
                     <div className={styles.navRight}></div>
                 </nav>
 
-                
-
-                <main>App components will go here</main>
-
                 <Routes>
                     <Route path="/about" element={<About />} />
                     <Route path="/" element={<Login />} />
                     <Route path="/messages" element={<Messages />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/create-account" element={<CreateAccount />} />
                 </Routes>
             </>
         </BrowserRouter>

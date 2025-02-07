@@ -1,15 +1,5 @@
-body {
-    background-color: #f0f0f0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
-
-#login-container {
-    margin-top: 72px;
-    /* Pushes content below fixed navbar to prevent overlap */
-}
-
-/* Add this to create a container for the content */
-.signup-container {
+/* Remove global styles */
+.signupContainer {
     margin-top: 72px;
     max-width: 100%;
     margin-left: auto;
@@ -19,9 +9,10 @@ body {
     background-color: #fbf7e9;
 }
 
-.signup-left {
+.signupLeft {
     flex: 1;
-    background-image: url('../../assets/orangecat.png');
+    background-image: url('/orangecat.png');
+    /* Move to public folder */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -33,25 +24,21 @@ body {
     background-color: white;
 }
 
-.signup-right {
+.signupRight {
     flex: 1;
     padding: 3rem;
     display: flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
     align-items: center;
-    /* Center the content horizontally */
 }
 
-/* Add a form container to control width */
-#signup-form {
+.signupForm {
     width: 100%;
-    /* Fixed width for the form */
     max-width: 100%;
-    /* Ensure it's responsive */
 }
 
-.signup-right h1 {
+.signupRight h1 {
     font-size: 3.5rem;
     font-weight: 500;
     margin-bottom: 1rem;
@@ -60,28 +47,27 @@ body {
     max-width: 100%;
 }
 
-.login-link {
+.loginLink {
     color: #9ca3af;
     margin-bottom: 2rem;
     width: 100%;
     max-width: 100%;
 }
 
-.login-link a {
+.loginLink a {
     color: #f7931e;
     text-decoration: none;
     margin-left: 0.5rem;
 }
 
-.form-group {
+.formGroup {
     margin-bottom: 1.5rem;
     width: 100%;
 }
 
-.form-group input {
+.formGroup input {
     width: 100%;
     box-sizing: border-box;
-    /* Ensure padding doesn't add to width */
     padding: 0.75rem;
     border-radius: 8px;
     border: 1px solid #e5e7eb;
@@ -91,31 +77,30 @@ body {
     font-size: 1rem;
 }
 
-.form-group input::placeholder {
+.formGroup input::placeholder {
     color: #9ca3af;
 }
 
-.checkbox-group {
+.checkboxGroup {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 }
 
-.checkbox-group label {
+.checkboxGroup label {
     color: #9ca3af;
     font-size: 0.875rem;
 }
 
-.checkbox-group a {
+.checkboxGroup a {
     color: #f7931e;
     text-decoration: none;
 }
 
-.signup-button {
+.signupButton {
     width: 100%;
     box-sizing: border-box;
-    /* Ensure padding doesn't add to width */
     padding: 0.75rem;
     background-color: #f7931e;
     color: white;
@@ -127,7 +112,41 @@ body {
     transition: all 0.2s ease;
 }
 
-.signup-button:hover {
-    background-color: #eaceae;
+.signupButton:hover {
+    background-color: #e88b1b;
     transform: translateY(-2px);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .signupContainer {
+        flex-direction: column;
+    }
+
+    .signupLeft {
+        display: none;
+    }
+
+    .signupRight {
+        padding: 2rem;
+    }
+
+    .signupRight h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .signupRight {
+        padding: 1.5rem;
+    }
+
+    .signupRight h1 {
+        font-size: 2rem;
+    }
+
+    .formGroup input,
+    .signupButton {
+        padding: 0.5rem;
+    }
 }
