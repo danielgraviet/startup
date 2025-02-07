@@ -2,7 +2,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
-.messages-container {
+.messagesContainer {
     display: grid;
     grid-template-columns: 280px 1fr 280px;
     height: calc(100vh - 72px);
@@ -13,7 +13,7 @@ body {
 }
 
 /* Left Sidebar Styles */
-.channels-sidebar {
+.channelsSidebar {
     background-color: white;
     border-right: 1px solid #e5e7eb;
     display: flex;
@@ -21,12 +21,12 @@ body {
     overflow: hidden;
 }
 
-.search-container {
+.searchContainer {
     padding: 16px;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.search-input {
+.searchInput {
     width: 100%;
     padding: 8px 12px;
     border: 1px solid #e5e7eb;
@@ -34,13 +34,13 @@ body {
     font-size: 0.875rem;
 }
 
-.channels-list {
+.channelsList {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
 }
 
-.section-header {
+.sectionHeader {
     font-size: 0.75rem;
     color: #6b7280;
     text-transform: uppercase;
@@ -48,7 +48,7 @@ body {
     margin: 16px 0 8px;
 }
 
-.channel-button {
+.channelButton {
     display: flex;
     align-items: center;
     width: 100%;
@@ -62,33 +62,33 @@ body {
     transition: background-color 0.2s;
 }
 
-.channel-button:hover {
+.channelButton:hover {
     background-color: #f3f4f6;
 }
 
-.channel-button.active {
+.channelButton.active {
     background-color: #f3f4f6;
 }
 
-.channel-icon {
+.channelIcon {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.channel-info {
+.channelInfo {
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-.channel-name {
+.channelName {
     font-weight: 600;
     color: #111827;
 }
 
-.channel-status {
+.channelStatus {
     font-size: 0.875rem;
     color: #6b7280;
     white-space: nowrap;
@@ -97,13 +97,13 @@ body {
 }
 
 /* Main Chat Area Styles */
-.chat-area {
+.chatArea {
     display: flex;
     flex-direction: column;
     background-color: white;
 }
 
-.chat-header {
+.chatHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -111,13 +111,13 @@ body {
     border-bottom: 1px solid #e5e7eb;
 }
 
-.chat-title h1 {
+.chatTitle h1 {
     font-size: 1.25rem;
     font-weight: 600;
     color: #111827;
 }
 
-.action-button {
+.actionButton {
     padding: 8px;
     border: none;
     background: none;
@@ -126,16 +126,16 @@ body {
     transition: background-color 0.2s;
 }
 
-.action-button:hover {
+.actionButton:hover {
     background-color: #f3f4f6;
 }
 
-.action-button img {
+.actionButton img {
     width: 20px;
     height: 20px;
 }
 
-.chat-messages {
+.chatMessages {
     flex: 1;
     overflow-y: auto;
     padding: 16px;
@@ -150,42 +150,42 @@ body {
     max-width: 80%;
 }
 
-.message-avatar {
+.messageAvatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.message-content {
+.messageContent {
     flex: 1;
 }
 
-.message-header {
+.messageHeader {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 4px;
 }
 
-.message-author {
+.messageAuthor {
     font-weight: 600;
     color: #111827;
 }
 
-.message-time {
+.messageTime {
     font-size: 0.75rem;
     color: #6b7280;
 }
 
-.message-text {
+.messageText {
     color: #374151;
     line-height: 1.5;
     margin: 0;
 }
 
 /* Message input styles */
-.message-input-container {
+.messageInputContainer {
     display: flex;
     gap: 12px;
     padding: 16px;
@@ -193,7 +193,7 @@ body {
     border-top: 1px solid #e5e7eb;
 }
 
-.message-input {
+.messageInput {
     flex: 1;
     padding: 12px;
     border: 1px solid #e5e7eb;
@@ -202,13 +202,13 @@ body {
     resize: none;
 }
 
-.message-input:focus {
+.messageInput:focus {
     outline: none;
     border-color: #f7931e;
     box-shadow: 0 0 0 2px rgba(247, 147, 30, 0.1);
 }
 
-.send-button {
+.sendButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -221,41 +221,41 @@ body {
     transition: background-color 0.2s;
 }
 
-.send-button:hover {
+.sendButton:hover {
     background-color: #e88b1b;
 }
 
-.send-button img {
+.sendIcon {
     width: 20px;
     height: 20px;
     filter: brightness(0) invert(1);
 }
 
 /* Right Sidebar Styles */
-.info-sidebar {
+.infoSidebar {
     background-color: white;
     border-left: 1px solid #e5e7eb;
     padding: 16px;
     overflow-y: auto;
 }
 
-.group-info h2 {
+.groupInfo h2 {
     font-size: 1.25rem;
     font-weight: 600;
     color: #111827;
     margin-bottom: 24px;
 }
 
-.info-section {
+.infoSection {
     padding: 16px 0;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.info-section:last-child {
+.infoSection:last-child {
     border-bottom: none;
 }
 
-.info-section h3 {
+.infoSection h3 {
     font-size: 0.875rem;
     font-weight: 600;
     color: #6b7280;
@@ -264,52 +264,52 @@ body {
 }
 
 /* Member List Styles */
-.member-list {
+.memberList {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.member-item {
+.memberItem {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.member-avatar {
+.memberAvatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.member-name {
+.memberName {
     font-size: 0.875rem;
     color: #111827;
 }
 
 /* Created Date Styles */
-.created-date {
+.createdDate {
     font-size: 0.875rem;
     color: #374151;
 }
 
 /* Cat Fact Styles */
-.cat-fact {
+.catFact {
     background-color: #f8f9fa;
     border-radius: 8px;
     padding: 16px;
     margin-top: 16px;
 }
 
-.fact-text {
+.factText {
     font-size: 0.875rem;
     color: #374151;
     line-height: 1.5;
     margin-bottom: 12px;
 }
 
-.refresh-fact {
+.refreshFact {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -323,11 +323,11 @@ body {
     transition: background-color 0.2s;
 }
 
-.refresh-fact:hover {
+.refreshFact:hover {
     background-color: #e88b1b;
 }
 
-.refresh-icon {
+.refreshIcon {
     width: 16px;
     height: 16px;
     filter: brightness(0) invert(1);
@@ -335,21 +335,21 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .messages-container {
+    .messagesContainer {
         grid-template-columns: 280px 1fr;
     }
 
-    .info-sidebar {
+    .infoSidebar {
         display: none;
     }
 }
 
 @media (max-width: 768px) {
-    .messages-container {
+    .messagesContainer {
         grid-template-columns: 1fr;
     }
 
-    .channels-sidebar {
+    .channelsSidebar {
         display: none;
     }
 }
