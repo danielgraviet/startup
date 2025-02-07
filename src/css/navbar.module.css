@@ -14,21 +14,21 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.nav-left {
+.navLeft {
     flex: 0 0 150px;
 }
 
-.nav-center {
+.navCenter {
     flex: 1;
     display: flex;
     justify-content: center;
 }
 
-.nav-right {
+.navRight {
     flex: 0 0 200px;
 }
 
-.nav-center ul {
+.navCenter ul {
     display: flex;
     gap: 2rem;
     margin: 0;
@@ -37,11 +37,11 @@
     justify-content: center;
 }
 
-.nav-center li {
+.navCenter li {
     display: inline-flex;
 }
 
-.nav-center li a {
+.navCenter li a {
     color: #202123;
     text-decoration: none;
     font-size: 0.875rem;
@@ -50,7 +50,7 @@
     transition: color 0.2s ease;
 }
 
-.nav-center li a:hover {
+.navCenter li a:hover {
     background-color: transparent;
     color: #666;
 }

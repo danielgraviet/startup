@@ -1,34 +1,29 @@
 /* About Page Styles */
-body {
-    background-color: #f0f0f0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
-
-.about-container {
+.aboutContainer {
     max-width: 1200px;
     margin: 72px auto 0;
     /* Added top margin to account for navbar */
     padding: 40px 20px;
 }
 
-.about-header {
+.aboutHeader {
     margin-bottom: 60px;
 }
 
-.about-header h1 {
+.aboutHeader h1 {
     font-size: 4rem;
     color: #1a1a3a;
     margin-bottom: 30px;
 }
 
-.about-header p {
+.aboutHeader p {
     font-size: 1.2rem;
     line-height: 1.6;
     color: #333;
     max-width: 800px;
 }
 
-.hero-image {
+.heroImage {
     width: 100%;
     height: 400px;
     overflow: hidden;
@@ -36,37 +31,37 @@ body {
     margin-bottom: 80px;
 }
 
-.hero-image img {
+.heroImage img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.values-section {
+.valuesSection {
     text-align: center;
     margin-top: 80px;
 }
 
-.values-section h2 {
+.valuesSection h2 {
     font-size: 3rem;
     color: #1a1a3a;
     margin-bottom: 50px;
 }
 
-.values-grid {
+.valuesGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
     margin-top: 40px;
 }
 
-.value-card {
+.valueCard {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.value-icon {
+.valueIcon {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -76,28 +71,28 @@ body {
     margin-bottom: 20px;
 }
 
-.value-icon img {
+.valueIcon img {
     width: 50px;
     height: 50px;
 }
 
-.value-icon.green {
+.green {
     background-color: #c5e1a5;
 }
 
-.value-icon.purple {
+.purple {
     background-color: #d1c4e9;
 }
 
-.value-icon.orange {
+.orange {
     background-color: #ffe0b2;
 }
 
-.value-icon.blue {
+.blue {
     background-color: #b3e5fc;
 }
 
-.value-card h3 {
+.valueCard h3 {
     font-size: 1.2rem;
     color: #333;
     margin-top: 15px;
@@ -105,21 +100,21 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .values-grid {
+    .valuesGrid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .about-header h1 {
+    .aboutHeader h1 {
         font-size: 3rem;
     }
 }
 
 @media (max-width: 480px) {
-    .values-grid {
+    .valuesGrid {
         grid-template-columns: 1fr;
     }
 
-    .about-header h1 {
+    .aboutHeader h1 {
         font-size: 2.5rem;
     }
 }
