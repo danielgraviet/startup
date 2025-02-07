@@ -7,6 +7,8 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { About } from './pages/about';
 import { Login } from './pages/login';
 import { Messages } from './pages/messages';
+import { Contact } from './pages/contact';
+
 export default function App() {
     const saveUserName = () => {
         const username = document.getElementById("username").value;
@@ -41,6 +43,7 @@ export default function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/" element={<Login />} />
                     <Route path="/messages" element={<Messages />} />
+                    <Route path="/contact" element={<Contact />} />
                 </Routes>
             </>
         </BrowserRouter>
