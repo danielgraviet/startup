@@ -28,24 +28,29 @@ export function Login(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log('Login form submitted'); // Debug log
 
         // Basic validation
         if (!credentials.username || !credentials.password) {
             setError('Please fill in all fields');
+            console.log('Error:', 'Please fill in all fields'); // Debug log
             return;
         }
 
         // Get stored users
         const users = JSON.parse(localStorage.getItem('users') || '{}');
+        console.log('Stored users:', users); // Debug log
 
         // Check if user exists and password matches
         if (users[credentials.username] === credentials.password) {
             localStorage.setItem('currentUser', credentials.username);
             localStorage.setItem('isLoggedIn', 'true');
             props.setIsLoggedIn(true);
+            console.log('Login successful'); // Debug log
             navigate('/messages');
         } else {
             setError('Invalid username or password');
+            console.log('Error:', 'Invalid username or password'); // Debug log
         }
     };
 
@@ -61,7 +66,18 @@ export function Login(props) {
                             onSubmit={handleSubmit}
                             className={styles.loginForm}
                         >
-                            {error && <div className={styles.errorMessage}>{error}</div>}
+                            {error && (
+                                <div className={styles.errorMessage} style={{
+                                    backgroundColor: '#fee2e2',
+                                    color: '#dc2626',
+                                    padding: '12px',
+                                    borderRadius: '8px',
+                                    marginBottom: '20px',
+                                    textAlign: 'center'
+                                }}>
+                                    {error}
+                                </div>
+                            )}
                             <div className={styles.formGroup}>
                                 <input
                                     type="text"

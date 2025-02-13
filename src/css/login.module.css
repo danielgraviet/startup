@@ -278,3 +278,15 @@
     margin-bottom: 20px;
     text-align: center;
 }
+
+.errorMessage {
+    background-color: #fee2e2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    width: 100%;
+}
