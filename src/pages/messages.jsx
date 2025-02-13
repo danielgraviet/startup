@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../css/messages.module.css';
-
+import { CatFact } from '../components/catFact';
+import { FactAPI } from '../components/factAPI';
 export function Messages() {
     const username = localStorage.getItem("username");
+
+    const [fact, setFact] = useState('');
+
+    const fetchFact = () => {
+        fetch('https://catfact.ninja/fact')
+            .then(response => response.json())
+            .then(data => setFact(data.fact))
+            .catch(error => console.error('Error fetching fact:', error));
+    };
+
+    useEffect(() => {
+        fetchFact();
+    }, []);
 
     return (
         <div className={styles.messagesContainer}>
@@ -139,15 +153,12 @@ export function Messages() {
 
                     <div className={`${styles.infoSection} ${styles.catFact}`}>
                         <h3>Random Cat Fact</h3>
-                        <p className={styles.factText}>
-                            Cats have over 20 different vocalizations, including meowing, purring,
-                            trilling, chirping, hissing, and growling.
-                        </p>
-                        <button className={styles.refreshFact}>
-                            <img src="/random.png" alt="Refresh" className={styles.refreshIcon} />
-                            New Fact
-                        </button>
+                        <CatFact />
                     </div>
+                    
+                        <h3>Random Fact</h3>
+                        <FactAPI />
+                    
                 </div>
             </aside>
         </div>

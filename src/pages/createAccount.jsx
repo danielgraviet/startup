@@ -53,6 +53,14 @@ export function CreateAccount() {
         navigate('/');
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     return (
         <div className={styles.mainContainer}>
             <div className={styles.contentWrapper}>
