@@ -353,3 +353,55 @@ body {
         display: none;
     }
 }
+
+.addChannelContainer {
+    margin-top: 10px;
+}
+
+.addChannelButton {
+    width: 100%;
+    padding: 8px;
+    background-color: #f7931e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.addChannelButton:hover {
+    background-color: #e88b1b;
+}
+
+.addChannelForm {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.addChannelInput {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.addChannelSubmit {
+    width: 100%;
+    padding: 8px;
+    background-color: #f7931e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.addChannelSubmit:hover {
+    background-color: #e88b1b;
+}

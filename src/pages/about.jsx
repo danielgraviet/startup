@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from '../css/about.module.css';  // Assuming you'll create this CSS module
-
 export function About() {
     return (
         <div className={styles.aboutContainer}>
@@ -12,7 +11,6 @@ export function About() {
                     to build relationships while discovering something new along the way.
                 </p>
             </div>
-
             <div className={styles.heroImage}>
                 <img src="/orange.jpg" alt="orange 3-d rendering" />
             </div>

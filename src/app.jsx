@@ -9,6 +9,7 @@ import { Login } from './pages/login';
 import { Messages } from './pages/messages';
 import { Contact } from './pages/contact';
 import { CreateAccount } from './pages/createAccount';
+import { MessagesProvider } from './context/MessagesContext';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -50,7 +51,7 @@ export default function App() {
 
     return (
         <BrowserRouter>
-            <>
+            <MessagesProvider>
                 <nav className={styles.navbar}>
                     <div className={styles.navLeft}>
                         <img src="/logo.png" alt="Logo" />
@@ -105,7 +106,7 @@ export default function App() {
                         }
                     />
                 </Routes>
-            </>
+            </MessagesProvider>
         </BrowserRouter>
     );
 }

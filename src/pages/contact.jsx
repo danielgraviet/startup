@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../css/contact.module.css';
 
 export function Contact() {
+    const [formData, setFormData] = useState({
+        email: "",
+        name: "",
+        message: ""
+    });
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submitted: ', formData);
+        localStorage.setItem('formData', JSON.stringify(formData));
+    };
+
     return (
         <div className={styles.contactContainer}>
             <div className={styles.contactContent}>
@@ -12,31 +34,17 @@ export function Contact() {
                     page, or by phone, email, or social media.
                 </p>
 
-                <div className={styles.contactOptions}>
-                    <button className={`${styles.contactButton} ${styles.supportChat}`}>
-                        <img src="/chatIcon.png" alt="Chat icon" />
-                        Via Support Chat
-                    </button>
-
-                    <button className={`${styles.contactButton} ${styles.call}`}>
-                        <img src="/phoneIcon.png" alt="Phone icon" />
-                        Via Call
-                    </button>
-                </div>
 
                 <div className={styles.contactFormContainer}>
-                    <button className={`${styles.contactButton} ${styles.emailForm}`}>
-                        <img src="/mailIcon.png" alt="Email icon" />
-                        Via Email Form
-                    </button>
-
-                    <form className={styles.contactForm}>
+                    <form className={styles.contactForm} onSubmit={handleSubmit}>
                         <div className={styles.formGroup}>
                             <label htmlFor="name">Name</label>
                             <input
                                 type="text"
                                 id="name"
                                 name="name"
+                                value={formData.name}
+                                onChange={handleChange}
                                 required
                             />
                         </div>
@@ -47,6 +55,8 @@ export function Contact() {
                                 type="email"
                                 id="email"
                                 name="email"
+                                onChange={handleChange}
+                                value={formData.email}
                                 required
                             />
                         </div>
@@ -58,8 +68,12 @@ export function Contact() {
                                 name="message"
                                 rows="5"
                                 required
+                                onChange={handleChange}
+                                value={formData.message}
                             />
                         </div>
+
+                        <button type="submit" className={styles.contactButton}>Send</button>
                     </form>
                 </div>
             </div>
