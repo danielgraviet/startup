@@ -131,8 +131,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [X] **All functionality implemented or mocked out** - Channels: I created a AddChannel component that implements useState and handleSubmit to allow a user to create a new channel to send messages in. I created a MessagesInput component to allow users to create and send custom messages in the specific chat using useState and handleSubmit. I also added functionality for login and registering a user, by adding it to localStorage. Also hooked up an API to get cat facts. I did the same thing with the contact page. It stores the form data in localStorage.
+- [X] **Hooks** - I added  useEffect and useState hooks to the project to help with the messaging, login, and contact page.
 
 ## 🚀 Service deliverable
 
