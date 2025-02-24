@@ -32,6 +32,13 @@ body {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 0.875rem;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #f7931e;
+    box-shadow: 0 0 0 2px rgba(247, 147, 30, 0.1);
 }
 
 .channelsList {
@@ -404,4 +411,34 @@ body {
 
 .addChannelSubmit:hover {
     background-color: #e88b1b;
+}
+
+.successMessage {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.noResults {
+    padding: 16px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
 }

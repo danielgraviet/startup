@@ -1,3 +1,5 @@
+// this is to manage and share messaging data like messages and channels throughout the app
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const MessagesContext = createContext();

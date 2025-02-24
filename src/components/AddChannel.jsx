@@ -5,6 +5,7 @@ import styles from '../css/messages.module.css';
 export function AddChannel() {
     const [isOpen, setIsOpen] = useState(false);
     const [channelName, setChannelName] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
     const { createChannel } = useMessages();
 
     const handleSubmit = (e) => {
@@ -13,7 +14,15 @@ export function AddChannel() {
 
         // Create public channel with empty members array
         createChannel(channelName, []);
-        
+
+        // Show success message
+        setShowSuccess(true);
+
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+            setShowSuccess(false);
+        }, 3000);
+
         // Reset form
         setChannelName('');
         setIsOpen(false);
@@ -21,8 +30,14 @@ export function AddChannel() {
 
     return (
         <div className={styles.addChannelContainer}>
-            <button 
-                onClick={() => setIsOpen(!isOpen)} 
+            {showSuccess && (
+                <div className={styles.successMessage}>
+                    Channel created successfully!
+                </div>
+            )}
+
+            <button
+                onClick={() => setIsOpen(!isOpen)}
                 className={styles.addChannelButton}
             >
                 + New Channel

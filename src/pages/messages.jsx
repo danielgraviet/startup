@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../css/messages.module.css';
 import { CatFact } from '../components/catFact';
 import { useMessages } from '../context/MessagesContext';
@@ -13,6 +13,12 @@ export function Messages() {
         channels
     } = useMessages();
     const currentUser = localStorage.getItem('currentUser');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Filter channels based on search query
+    const filteredChannels = channels.filter(channel =>
+        channel.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     // Set initial channel if none selected
     React.useEffect(() => {
@@ -29,12 +35,22 @@ export function Messages() {
     const currentChannel = channels.find(channel => channel.id === currentChat);
     const currentMessages = messages[currentChat] || [];
 
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
     return (
         <div className={styles.messagesContainer}>
             {/* Left Sidebar */}
             <aside className={styles.channelsSidebar}>
                 <div className={styles.searchContainer}>
-                    <input type="search" placeholder="Search" className={styles.searchInput} />
+                    <input
+                        type="search"
+                        placeholder="Search channels..."
+                        className={styles.searchInput}
+                        value={searchQuery}
+                        onChange={handleSearch}
+                    />
                 </div>
 
                 <div className={styles.channelsList}>
@@ -43,7 +59,7 @@ export function Messages() {
                         <AddChannel />
                     </div>
                     <div className={styles.channelButtons}>
-                        {channels.map(channel => (
+                        {filteredChannels.map(channel => (
                             <button
                                 key={channel.id}
                                 className={`${styles.channelButton} ${currentChat === channel.id ? styles.active : ''}`}
@@ -58,6 +74,11 @@ export function Messages() {
                                 </div>
                             </button>
                         ))}
+                        {filteredChannels.length === 0 && searchQuery && (
+                            <div className={styles.noResults}>
+                                No channels found matching "{searchQuery}"
+                            </div>
+                        )}
                     </div>
                 </div>
             </aside>
@@ -66,7 +87,8 @@ export function Messages() {
             <main className={styles.chatArea}>
                 <div className={styles.chatHeader}>
                     <div className={styles.chatTitle}>
-                        <h1>{currentChannel?.name || 'Select a channel'}</h1>
+                        {/* this is conditional rendering for the chat title, the ? checks if it is false. */}
+                        <h1>{currentChannel?.name || 'Select or create a channel'}</h1>
                     </div>
                 </div>
 
