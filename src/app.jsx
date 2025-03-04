@@ -42,11 +42,28 @@ export default function App() {
         };
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('currentUser');
-        setIsLoggedIn(false);
-        window.location.href = '/';
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                setIsLoggedIn(false);
+                window.location.href = '/';
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            setIsLoggedIn(false);
+            window.location.href = '/';
+        }
     };
 
     return (
