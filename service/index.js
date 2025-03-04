@@ -12,9 +12,9 @@ app.use(cookieParser());
 app.use(express.static('public')); // Serve static files from public directory
 
 // In-memory data
-let users = []; // [{ username, token }]
-let channels = []; // [{ name, description }]
-let messages = []; // [{ channelName, username, content, timestamp }]
+let users = [];
+let channels = [];
+let messages = [];
 const authCookieName = 'token';
 
 // API Router
@@ -46,9 +46,7 @@ async function findChannel(name) {
 }
 
 async function createChannel(name, description = '') {
-  if (await findChannel(name)) {
-    return null; // Channel already exists
-  }
+  if (await findChannel(name)) return null;
   const channel = { name, description };
   channels.push(channel);
   return channel;
@@ -57,12 +55,25 @@ async function createChannel(name, description = '') {
 // Authentication Endpoints
 apiRouter.post('/auth/register', async (req, res) => {
   const { username } = req.body;
+  if (!username) return res.status(400).json({ msg: 'Username is required' });
   if (await findUser('username', username)) {
-    res.status(409).send({ msg: 'Username already exists' });
-  } else {
-    const user = await createUser(username);
+    return res.status(409).json({ msg: 'Username already exists' });
+  }
+  const user = await createUser(username);
+  setAuthCookie(res, user.token);
+  res.json({ username: user.username });
+});
+
+apiRouter.post('/auth/login', async (req, res) => {
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ msg: 'Username is required' });
+  const user = await findUser('username', username);
+  if (user) {
+    user.token = uuid.v4();
     setAuthCookie(res, user.token);
-    res.send({ username: user.username });
+    res.json({ username: user.username });
+  } else {
+    res.status(401).json({ msg: 'User not found' });
   }
 });
 
@@ -73,67 +84,62 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
-// Channel Endpoints
+// Channel and Message Endpoints (unchanged for now)
 apiRouter.post('/channel', async (req, res) => {
   const { name, description } = req.body;
-  if (!name) {
-    return res.status(400).send({ msg: 'Channel name is required' });
-  }
+  if (!name) return res.status(400).json({ msg: 'Channel name is required' });
   const channel = await createChannel(name, description);
-  if (!channel) {
-    return res.status(409).send({ msg: 'Channel already exists' });
-  }
-  res.send(channel);
+  if (!channel) return res.status(409).json({ msg: 'Channel already exists' });
+  res.json(channel);
 });
 
 apiRouter.get('/channels', (_req, res) => {
-  res.send(channels);
+  res.json(channels);
 });
 
-// Messaging Endpoints
 const verifyAuth = async (req, res, next) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    req.user = user; // Attach user to request
+    req.user = user;
     next();
   } else {
-    res.status(401).send({ msg: 'Unauthorized' });
+    res.status(401).json({ msg: 'Unauthorized' });
   }
 };
 
 apiRouter.post('/message', verifyAuth, async (req, res) => {
   const { channelName, content } = req.body;
   if (!channelName || !content) {
-    return res.status(400).send({ msg: 'Channel name and content are required' });
+    return res.status(400).json({ msg: 'Channel name and content are required' });
   }
   if (!(await findChannel(channelName))) {
-    return res.status(404).send({ msg: 'Channel not found' });
+    return res.status(404).json({ msg: 'Channel not found' });
   }
-
-  const message = {
-    channelName,
-    username: req.user.username,
-    content,
-    timestamp: new Date().toISOString(),
-  };
+  const message = { channelName, username: req.user.username, content, timestamp: new Date().toISOString() };
   messages.push(message);
-  res.send(message);
+  res.json(message);
 });
 
 apiRouter.get('/messages/:channelName', verifyAuth, (req, res) => {
   const { channelName } = req.params;
   const channelMessages = messages.filter((m) => m.channelName === channelName);
-  res.send(channelMessages);
+  res.json(channelMessages);
 });
 
-// Error Handling
+// Error Handling Middleware (before static fallback)
 app.use((err, req, res, next) => {
-  res.status(500).send({ type: err.name, message: err.message });
+  console.error('Server error:', err);
+  res.status(500).json({ msg: 'Internal server error', error: err.message });
 });
 
-// Fallback to index.html
-app.use((_req, res) => {
-  res.sendFile('index.html', { root: 'public' });
+// Static Fallback (only if public directory exists)
+app.use((req, res, next) => {
+  const publicPath = path.join(__dirname, 'public', 'index.html');
+  if (require('fs').existsSync(publicPath)) {
+    res.sendFile('index.html', { root: 'public' });
+  } else {
+    res.status(404).json({ msg: 'Route not found' });
+  }
 });
 
 // Start Server

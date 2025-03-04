@@ -5,7 +5,7 @@ import styles from '../css/login.module.css';
 export function Login(props) {
     const [credentials, setCredentials] = useState({
         username: '',
-        password: '' // Keeping password for UI, though backend only uses username for now
+        password: ''
     });
     
     const [error, setError] = useState('');
@@ -29,21 +29,21 @@ export function Login(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Login form submitted'); // Debug log
+        console.log('Login form submitted');
 
         // Basic validation
         if (!credentials.username) {
             setError('Please enter a username');
-            console.log('Error:', 'Please enter a username'); // Debug log
+            console.log('Error:', 'Please enter a username');
             return;
         }
 
         try {
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: credentials.username }), // Backend only needs username
-                credentials: 'include', // Send/receive cookies
+                body: JSON.stringify({ username: credentials.username }),
+                credentials: 'include',
             });
 
             if (response.ok) {
@@ -51,16 +51,19 @@ export function Login(props) {
                 localStorage.setItem('currentUser', data.username);
                 localStorage.setItem('isLoggedIn', 'true');
                 props.setIsLoggedIn(true);
-                console.log('Login successful:', data); // Debug log
+                console.log('Login successful:', data);
                 navigate('/messages');
+            } else if (response.status === 404) {
+                setError('User not found. Please create an account.');
+                console.log('Error:', 'User not found');
             } else {
                 const errorData = await response.json();
-                setError(errorData.msg || 'Registration failed');
-                console.log('Error:', errorData.msg || 'Registration failed'); // Debug log
+                setError(errorData.msg || 'Login failed');
+                console.log('Error:', errorData.msg || 'Login failed');
             }
         } catch (err) {
-            setError('Network error occurred');
-            console.log('Error:', 'Network error occurred', err); // Debug log
+            setError('Network error occurred. Please try again.');
+            console.log('Error:', 'Network error occurred', err);
         }
     };
 
@@ -127,7 +130,6 @@ export function Login(props) {
                 <div className={styles.heroRight}>
                     <img src="/landingpage.png" alt="CatNip Interface" className={styles.heroImage} />
                 </div>
-
                 <div className={styles.footer}>
                     <a
                         href="https://github.com/danielgraviet/startup"
