@@ -5,7 +5,7 @@ import styles from '../css/login.module.css';
 // @ToDo:
 // - implement backend validation. 
 
-export function CreateAccount() {
+export function CreateAccount({ setIsLoggedIn }) {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -15,7 +15,7 @@ export function CreateAccount() {
     const [error, setError] = useState('');
     const navigate = useNavigate(); // is this a built in function?
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form submitted'); // Debug log
 
@@ -33,27 +33,31 @@ export function CreateAccount() {
             return;
         }
 
-        // Check if username already exists
-        const existingUsers = JSON.parse(localStorage.getItem('users') || '{}');
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: formData.username})
+            });
 
-        // this is looking up a key in the users object
-        if (existingUsers[formData.username]) {
-            setError('Username already exists');
-            console.log('Error:', 'Username already exists'); // Debug log
-            return;
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Account created successfully');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', formData.username);
+                setIsLoggedIn(true);
+                navigate('/messages');
+            } else {
+                setError(data.msg || "Registration failed");
+                console.log('Error:', data.msg);
+            }
+        } catch (error) {
+            setError('Network error. Please try again later.');
+            console.error('Fetch error: ', error);
         }
-
-        // Save new user
-        // think of a dictionary, it is using the username as the key and the password as the value
-        existingUsers[formData.username] = formData.password;
-
-        // remember, existing users is a dictionary object, and local storage can only store strings. 
-        // so we need to convert the object to a string
-        localStorage.setItem('users', JSON.stringify(existingUsers));
-        console.log('User created successfully'); // Debug log
-
-        // Redirect to login
-        navigate('/');
     };
 
     const handleChange = (e) => {

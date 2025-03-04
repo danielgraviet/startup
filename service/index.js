@@ -126,6 +126,7 @@ apiRouter.get('/messages/:channelName', verifyAuth, (req, res) => {
   res.json(channelMessages);
 });
 
+
 // Contact Endpoints
 apiRouter.post('/contact', verifyAuth, (req, res) => {
   const { email, name, message } = req.body;

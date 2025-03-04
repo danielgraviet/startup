@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from './css/navbar.module.css';
 import './app.css';
-
 import { BrowserRouter, NavLink, Route, Routes, Navigate } from 'react-router-dom';
 import { About } from './pages/about';
 import { Login } from './pages/login';
@@ -11,30 +10,26 @@ import { Contact } from './pages/contact';
 import { CreateAccount } from './pages/createAccount';
 import { MessagesProvider } from './context/MessagesContext';
 
-// Protected Route component
 const ProtectedRoute = ({ children }) => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-
+    console.log('ProtectedRoute - isLoggedIn:', isLoggedIn); // Debug
     if (!isLoggedIn) {
         return <Navigate to="/" />;
     }
-
     return children;
 };
 
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
 
-    // Update login state when localStorage changes
     useEffect(() => {
         const checkLoginStatus = () => {
-            setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
+            const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            console.log('checkLoginStatus - loggedIn:', loggedIn); // Debug
+            setIsLoggedIn(loggedIn);
         };
 
-        // Check initially
-        checkLoginStatus();
-
-        // Add event listener for localStorage changes
+        checkLoginStatus(); // Initial check
         window.addEventListener('storage', checkLoginStatus);
 
         return () => {
@@ -48,7 +43,6 @@ export default function App() {
                 method: 'DELETE',
                 credentials: 'include',
             });
-
             if (response.ok) {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('currentUser');
@@ -65,6 +59,8 @@ export default function App() {
             window.location.href = '/';
         }
     };
+
+    console.log('App render - isLoggedIn:', isLoggedIn); // Debug
 
     return (
         <BrowserRouter>
@@ -97,31 +93,10 @@ export default function App() {
 
                 <Routes>
                     <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-                    <Route path="/create-account" element={<CreateAccount />} />
-                    <Route
-                        path="/messages"
-                        element={
-                            <ProtectedRoute>
-                                <Messages />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/about"
-                        element={
-                            <ProtectedRoute>
-                                <About />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/contact"
-                        element={
-                            <ProtectedRoute>
-                                <Contact />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/create-account" element={<CreateAccount setIsLoggedIn={setIsLoggedIn} />} />
+                    <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                    <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+                    <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
                 </Routes>
             </MessagesProvider>
         </BrowserRouter>
