@@ -5,7 +5,7 @@ import styles from '../css/login.module.css';
 export function Login(props) {
     const [credentials, setCredentials] = useState({
         username: '',
-        password: ''
+        password: '' // Keeping password for UI, though backend only uses username for now
     });
     
     const [error, setError] = useState('');
@@ -27,31 +27,40 @@ export function Login(props) {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Login form submitted'); // Debug log
 
         // Basic validation
-        if (!credentials.username || !credentials.password) {
-            setError('Please fill in all fields');
-            console.log('Error:', 'Please fill in all fields'); // Debug log
+        if (!credentials.username) {
+            setError('Please enter a username');
+            console.log('Error:', 'Please enter a username'); // Debug log
             return;
         }
 
-        // Get stored users
-        const users = JSON.parse(localStorage.getItem('users') || '{}');
-        console.log('Stored users:', users); // Debug log
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: credentials.username }), // Backend only needs username
+                credentials: 'include', // Send/receive cookies
+            });
 
-        // Check if user exists and password matches
-        if (users[credentials.username] === credentials.password) {
-            localStorage.setItem('currentUser', credentials.username);
-            localStorage.setItem('isLoggedIn', 'true');
-            props.setIsLoggedIn(true);
-            console.log('Login successful'); // Debug log
-            navigate('/messages');
-        } else {
-            setError('Invalid username or password');
-            console.log('Error:', 'Invalid username or password'); // Debug log
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('currentUser', data.username);
+                localStorage.setItem('isLoggedIn', 'true');
+                props.setIsLoggedIn(true);
+                console.log('Login successful:', data); // Debug log
+                navigate('/messages');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.msg || 'Registration failed');
+                console.log('Error:', errorData.msg || 'Registration failed'); // Debug log
+            }
+        } catch (err) {
+            setError('Network error occurred');
+            console.log('Error:', 'Network error occurred', err); // Debug log
         }
     };
 
