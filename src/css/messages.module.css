@@ -442,3 +442,26 @@ body {
     color: #6b7280;
     font-size: 0.875rem;
 }
+
+.errorMessage {
+    background-color: #fee2e2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.loading {
+    padding: 10px;
+    text-align: center;
+    color: #666;
+}
+
+.error {
+    padding: 10px;
+    text-align: center;
+    color: #dc2626;
+    background-color: #fee2e2;
+    border-radius: 8px;
+}

@@ -6,26 +6,27 @@ export function AddChannel() {
     const [isOpen, setIsOpen] = useState(false);
     const [channelName, setChannelName] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
+    const [error, setError] = useState('');
     const { createChannel } = useMessages();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!channelName.trim()) return;
+        if (!channelName.trim()) {
+            setError('Channel name is required');
+            return;
+        }
 
-        // Create public channel with empty members array
-        createChannel(channelName, []);
-
-        // Show success message
-        setShowSuccess(true);
-
-        // Hide success message after 3 seconds
-        setTimeout(() => {
+        try {
+            await createChannel(channelName);
+            setShowSuccess(true);
+            setError('');
+            setTimeout(() => setShowSuccess(false), 3000);
+            setChannelName('');
+            setIsOpen(false);
+        } catch (error) {
+            setError(error.message || 'Failed to create channel');
             setShowSuccess(false);
-        }, 3000);
-
-        // Reset form
-        setChannelName('');
-        setIsOpen(false);
+        }
     };
 
     return (
@@ -33,6 +34,11 @@ export function AddChannel() {
             {showSuccess && (
                 <div className={styles.successMessage}>
                     Channel created successfully!
+                </div>
+            )}
+            {error && (
+                <div className={styles.errorMessage}>
+                    {error}
                 </div>
             )}
 
@@ -59,4 +65,4 @@ export function AddChannel() {
             )}
         </div>
     );
-} 
+}

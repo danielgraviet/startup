@@ -1,19 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../css/messages.module.css';
-import { CatFact } from '../components/catFact';
 import { useMessages } from '../context/MessagesContext';
-import { MessageInput } from '../components/MessageInput';
 import { AddChannel } from '../components/AddChannel';
 
 export function Messages() {
-    const {
-        currentChat,
-        setCurrentChat,
-        messages,
-        channels
-    } = useMessages();
-    const currentUser = localStorage.getItem('currentUser');
+    const { currentChat, setCurrentChat, channels } = useMessages();
     const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(true); // Track channel fetch status
+    const [error, setError] = useState(null); // Handle fetch errors
 
     // Filter channels based on search query
     const filteredChannels = channels.filter(channel =>
@@ -21,9 +15,14 @@ export function Messages() {
     );
 
     // Set initial channel if none selected
-    React.useEffect(() => {
-        if (!currentChat && channels.length > 0) {
-            setCurrentChat(channels[0].id);
+    useEffect(() => {
+        if (channels.length > 0) {
+            if (!currentChat) {
+                setCurrentChat(channels[0].id);
+            }
+            setLoading(false); // Channels loaded
+        } else {
+            setLoading(false); // No channels yet
         }
     }, [channels, currentChat, setCurrentChat]);
 
@@ -31,13 +30,12 @@ export function Messages() {
         setCurrentChat(channelId);
     };
 
-    // Get current channel info
-    const currentChannel = channels.find(channel => channel.id === currentChat);
-    const currentMessages = messages[currentChat] || [];
-
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
     };
+
+    // Get current channel info
+    const currentChannel = channels.find(channel => channel.id === currentChat);
 
     return (
         <div className={styles.messagesContainer}>
@@ -58,28 +56,35 @@ export function Messages() {
                         <span>All Messages</span>
                         <AddChannel />
                     </div>
-                    <div className={styles.channelButtons}>
-                        {filteredChannels.map(channel => (
-                            <button
-                                key={channel.id}
-                                className={`${styles.channelButton} ${currentChat === channel.id ? styles.active : ''}`}
-                                onClick={() => handleChannelClick(channel.id)}
-                            >
-                                <img src="/cougarIcon.png" alt="Channel icon" className={styles.channelIcon} />
-                                <div className={styles.channelInfo}>
-                                    <span className={styles.channelName}>{channel.name}</span>
-                                    <span className={styles.channelStatus}>
-                                        {messages[channel.id]?.[messages[channel.id].length - 1]?.content.substring(0, 20) + '...'}
-                                    </span>
-                                </div>
-                            </button>
-                        ))}
-                        {filteredChannels.length === 0 && searchQuery && (
-                            <div className={styles.noResults}>
-                                No channels found matching "{searchQuery}"
-                            </div>
-                        )}
-                    </div>
+
+                    {loading ? (
+                        <div className={styles.loading}>Loading channels...</div>
+                    ) : error ? (
+                        <div className={styles.error}>Error: {error}</div>
+                    ) : filteredChannels.length > 0 ? (
+                        <div className={styles.channelButtons}>
+                            {filteredChannels.map(channel => (
+                                <button
+                                    key={channel.id}
+                                    className={`${styles.channelButton} ${currentChat === channel.id ? styles.active : ''}`}
+                                    onClick={() => handleChannelClick(channel.id)}
+                                >
+                                    <img src="/cougarIcon.png" alt="Channel icon" className={styles.channelIcon} />
+                                    <div className={styles.channelInfo}>
+                                        <span className={styles.channelName}>{channel.name}</span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    ) : searchQuery ? (
+                        <div className={styles.noResults}>
+                            No channels found matching "{searchQuery}"
+                        </div>
+                    ) : (
+                        <div className={styles.noResults}>
+                            No channels available. Create one to start!
+                        </div>
+                    )}
                 </div>
             </aside>
 
@@ -87,31 +92,14 @@ export function Messages() {
             <main className={styles.chatArea}>
                 <div className={styles.chatHeader}>
                     <div className={styles.chatTitle}>
-                        {/* this is conditional rendering for the chat title, the ? checks if it is false. */}
                         <h1>{currentChannel?.name || 'Select or create a channel'}</h1>
                     </div>
                 </div>
 
+                {/* Placeholder for messages (to be implemented later) */}
                 <div className={styles.chatMessages}>
-                    {currentMessages.map(message => (
-                        <div
-                            key={message.id}
-                            className={`${styles.message} ${message.sender === currentUser ? styles.ownMessage : ''}`}
-                        >
-                            <img src="/cougarIcon.png" alt={message.sender} className={styles.messageAvatar} />
-                            <div className={styles.messageContent}>
-                                <div className={styles.messageHeader}>
-                                    <span className={styles.messageAuthor}>{message.sender}</span>
-                                    <span className={styles.messageTime}>
-                                        {new Date(message.timestamp).toLocaleTimeString()}
-                                    </span>
-                                </div>
-                                <p className={styles.messageText}>{message.content}</p>
-                            </div>
-                        </div>
-                    ))}
+                    <p>Select a channel to view messages</p>
                 </div>
-                <MessageInput />
             </main>
 
             {/* Right Sidebar */}
@@ -127,7 +115,7 @@ export function Messages() {
                                     <img src="/cougarIcon.png" alt={member} className={styles.memberAvatar} />
                                     <span className={styles.memberName}>{member}</span>
                                 </div>
-                            ))}
+                            )) || <p>No members yet</p>}
                         </div>
                     </div>
 
@@ -136,11 +124,6 @@ export function Messages() {
                         <p className={styles.createdDate}>
                             {currentChannel ? new Date(currentChannel.createdAt).toLocaleDateString() : '-'}
                         </p>
-                    </div>
-
-                    <div className={`${styles.infoSection} ${styles.catFact}`}>
-                        <h3>Random Cat Fact</h3>
-                        <CatFact />
                     </div>
                 </div>
             </aside>
