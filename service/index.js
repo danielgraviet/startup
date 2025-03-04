@@ -126,6 +126,18 @@ apiRouter.get('/messages/:channelName', verifyAuth, (req, res) => {
   res.json(channelMessages);
 });
 
+// Contact Endpoints
+apiRouter.post('/contact', verifyAuth, (req, res) => {
+  const { email, name, message } = req.body;
+
+  if (!email || !name || !message) {
+    return res.status(400).json({ msg: 'All fields are required' });
+  }
+
+  console.log('Received contact form submission:', { email, name, message });
+  res.status(200).json({ msg: 'Form submitted successfully' });
+});
+
 // Error Handling Middleware (before static fallback)
 app.use((err, req, res, next) => {
   console.error('Server error:', err);

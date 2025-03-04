@@ -8,6 +8,8 @@ export function Contact() {
         message: ""
     });
 
+    const [submitStatus, setSubmitStatus] = useState(null);
+
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
@@ -18,10 +20,36 @@ export function Contact() {
         });
     };
     
-    const handleSubmit = (e) => {
+    // change to the backend API calls. 
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted: ', formData);
-        localStorage.setItem('formData', JSON.stringify(formData));
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setFormData({
+                    email: "",
+                    name: "",
+                    message: ""
+                });
+                console.log('Form submitted successfully');
+            } else {
+                setSubmitStatus('error');
+                console.log('Form submission failed', response.status);
+            }
+        } catch (error) {
+            console.error('Error submitting form: ', error);
+            setSubmitStatus('error');
+        }
     };
 
     return (

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../css/login.module.css';
 
+// @ToDo:
+// - implement backend validation. 
+
 export function CreateAccount() {
     const [formData, setFormData] = useState({
         username: '',
