@@ -42,6 +42,7 @@ export function Contact() {
                     message: ""
                 });
                 console.log('Form submitted successfully');
+                setTimeout(() => setSubmitStatus(null), 3000);
             } else {
                 setSubmitStatus('error');
                 console.log('Form submission failed', response.status);
@@ -65,6 +66,19 @@ export function Contact() {
 
                 <div className={styles.contactFormContainer}>
                     <form className={styles.contactForm} onSubmit={handleSubmit}>
+                        {/* Success/Error Messages */}
+                        {submitStatus === 'success' && (
+                            <div className={styles.successBox}>
+                                Message sent successfully!
+                            </div>
+                        )}
+
+                        {submitStatus === 'error' && (
+                            <div className={styles.errorBox}>
+                                Failed to send message. Please try again.
+                            </div>
+                        )}
+
                         <div className={styles.formGroup}>
                             <label htmlFor="name">Name</label>
                             <input

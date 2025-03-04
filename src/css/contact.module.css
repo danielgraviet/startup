@@ -147,3 +147,28 @@ body {
         font-size: 2.5rem;
     }
 }
+
+/* Success and Error Messages */
+.successBox {
+    background-color: #d1fae5; /* Light green */
+    color: #065f46; /* Dark green text */
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #10b981; /* Green border */
+}
+
+.errorBox {
+    background-color: #fee2e2; /* Light red */
+    color: #dc2626; /* Red text */
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    border: 1px solid #f87171; /* Red border */
+}
+
+.successBox, .errorBox {
+    transition: opacity 0.5s ease-in-out;
+}
