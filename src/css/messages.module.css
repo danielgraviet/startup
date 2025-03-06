@@ -152,47 +152,33 @@ body {
 }
 
 .message {
-    display: flex;
-    gap: 12px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
     max-width: 80%;
+    align-self: flex-start; /* Changed: Simpler message layout without avatar */
 }
 
-.messageAvatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.messageContent {
-    flex: 1;
-}
-
-.messageHeader {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
-.messageAuthor {
+.messageSender { /* Changed: Renamed from .messageAuthor */
     font-weight: 600;
     color: #111827;
+    margin-right: 8px;
 }
 
-.messageTime {
-    font-size: 0.75rem;
-    color: #6b7280;
-}
-
-.messageText {
+.messageContent { /* Changed: Renamed from .messageText */
     color: #374151;
     line-height: 1.5;
-    margin: 0;
+    word-break: break-word;
+}
+
+.messageTimestamp { /* Changed: Renamed from .messageTime */
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-left: 8px;
 }
 
 /* Message input styles */
-.messageInputContainer {
+.messageInputForm { /* Changed: Renamed from .messageInputContainer */
     display: flex;
     gap: 12px;
     padding: 16px;
@@ -219,7 +205,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
+    width: 40px; /* Changed: Matches your design */
     height: 40px;
     border: none;
     border-radius: 8px;
@@ -232,11 +218,7 @@ body {
     background-color: #e88b1b;
 }
 
-.sendIcon {
-    width: 20px;
-    height: 20px;
-    filter: brightness(0) invert(1);
-}
+/* Removed .sendIcon since no icon is used in JSX yet; add back if you include one */
 
 /* Right Sidebar Styles */
 .infoSidebar {

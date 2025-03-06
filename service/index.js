@@ -14,7 +14,7 @@ app.use(express.static('public')); // Serve static files from public directory
 // In-memory data
 let users = [];
 let channels = [];
-let messages = [];
+let messages = {}; // in-memory storage (replace with database in production)
 const authCookieName = 'token';
 
 // API Router
@@ -47,10 +47,20 @@ async function findChannel(name) {
 
 async function createChannel(name, description = '') {
   if (await findChannel(name)) return null;
-  const channel = { name, description };
+  const channel = { id: uuid.v4(), name, description };
   channels.push(channel);
   return channel;
 }
+
+const verifyAuth = async (req, res, next) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    req.user = user;
+    next();
+  } else {
+    res.status(401).json({ msg: 'Unauthorized' });
+  }
+};
 
 // Authentication Endpoints
 apiRouter.post('/auth/register', async (req, res) => {
@@ -85,7 +95,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
 });
 
 // Channel and Message Endpoints (unchanged for now)
-apiRouter.post('/channel', async (req, res) => {
+apiRouter.post('/channel', verifyAuth, async (req, res) => {
   const { name, description } = req.body;
   if (!name) return res.status(400).json({ msg: 'Channel name is required' });
   const channel = await createChannel(name, description);
@@ -93,37 +103,47 @@ apiRouter.post('/channel', async (req, res) => {
   res.json(channel);
 });
 
-apiRouter.get('/channels', (_req, res) => {
+apiRouter.get('/channels', verifyAuth, (_req, res) => {
   res.json(channels);
 });
 
-const verifyAuth = async (req, res, next) => {
-  const user = await findUser('token', req.cookies[authCookieName]);
-  if (user) {
-    req.user = user;
-    next();
-  } else {
-    res.status(401).json({ msg: 'Unauthorized' });
-  }
-};
-
-apiRouter.post('/message', verifyAuth, async (req, res) => {
-  const { channelName, content } = req.body;
-  if (!channelName || !content) {
-    return res.status(400).json({ msg: 'Channel name and content are required' });
-  }
-  if (!(await findChannel(channelName))) {
-    return res.status(404).json({ msg: 'Channel not found' });
-  }
-  const message = { channelName, username: req.user.username, content, timestamp: new Date().toISOString() };
-  messages.push(message);
-  res.json(message);
+// MESSAGE ENDPOINTS
+// get message for a channel
+apiRouter.get('/messages/:channelId', verifyAuth, async (req, res) => {
+  const { channelId } = req.params;
+  const channelMessages = messages[channelId] || [];
+  res.json(channelMessages);
 });
 
-apiRouter.get('/messages/:channelName', verifyAuth, (req, res) => {
-  const { channelName } = req.params;
-  const channelMessages = messages.filter((m) => m.channelName === channelName);
-  res.json(channelMessages);
+
+// send a message to a channel
+apiRouter.post('/messages/:channelId', verifyAuth, (req, res) => {
+  const { channelId } = req.params;
+  const { content } = req.body;
+  const user = req.user.username;
+
+  if (!content) {
+    return res.status(400).json({ msg: 'Content is required' });
+  }
+
+  const channel = channels.find((c) => c.id === channelId);
+  if (!channel) {
+    return res.status(404).json({ msg: 'Channel not found' });
+  }
+
+  const message = { 
+    id: uuid.v4(),
+    content,
+    sender: user,
+    timestamp: new Date().toISOString()
+  };
+
+  if (!messages[channelId]) {
+    messages[channelId] = [];
+  }
+
+  messages[channelId].push(message);
+  res.status(201).json(message);
 });
 
 

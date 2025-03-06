@@ -6,25 +6,23 @@ export function MessagesProvider({ children }) {
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState({});
     const [channels, setChannels] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [messagesLoading, setMessagesLoading] = useState(false);
     const [error, setError] = useState(null);
     const currentUser = localStorage.getItem('currentUser');
 
     useEffect(() => {
         const fetchChannels = async () => {
+            if (!currentUser) {
+                setLoading(false);
+                return;
+            }
             try {
                 setLoading(true);
                 const response = await fetch('/api/channels', { credentials: 'include' });
                 if (response.ok) {
                     const data = await response.json();
-                    const formattedChannels = data.map((channel, index) => ({
-                        id: index + 1,
-                        name: channel.name,
-                        description: channel.description || '',
-                        members: [currentUser],
-                        createdAt: new Date().toISOString()
-                    }));
-                    setChannels(formattedChannels);
+                    setChannels(data);
                     setError(null);
                 } else {
                     throw new Error('Failed to fetch channels');
@@ -37,7 +35,30 @@ export function MessagesProvider({ children }) {
             }
         };
         fetchChannels();
-    }, []);
+    }, [currentUser]);
+
+    useEffect(() => {
+        const fetchMessages = async () => {
+            if (!currentChat) return;
+            try {
+                setMessagesLoading(true);
+                const response = await fetch(`/api/messages/${currentChat}`, { credentials: 'include' });
+                if (response.ok) {
+                    const data = await response.json();
+                    setMessages(prev => ({ ...prev, [currentChat]: data }));
+                    setError(null);
+                } else {
+                    throw new Error('Failed to fetch messages');
+                }
+            } catch (error) {
+                console.error('Error fetching messages:', error);
+                setError(error.message);
+            } finally {
+                setMessagesLoading(false);
+            }
+        };
+        fetchMessages();
+    }, [currentChat]);
 
     const createChannel = async (name) => {
         try {
@@ -51,18 +72,37 @@ export function MessagesProvider({ children }) {
                 const data = await response.json();
                 throw new Error(data.msg || 'Failed to create channel');
             }
-            const data = await response.json();
-            const newChannel = {
-                id: channels.length + 1,
-                name: data.name,
-                description: data.description || '',
-                members: [currentUser],
-                createdAt: new Date().toISOString()
-            };
+            const newChannel = await response.json();
             setChannels(prev => [...prev, newChannel]);
+            setCurrentChat(newChannel.id);
+            setMessages(prev => ({ ...prev, [newChannel.id]: [] }));
             return newChannel.id;
         } catch (error) {
             console.error('Error creating channel:', error);
+            throw error;
+        }
+    };
+
+    const sendMessage = async (channelId, content) => {
+        try {
+            const response = await fetch(`/api/messages/${channelId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ content }),
+            });
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.msg || 'Failed to send message');
+            }
+            const newMessage = await response.json();
+            setMessages(prev => ({
+                ...prev,
+                [channelId]: [...(prev[channelId] || []), newMessage],
+            }));
+            setError(null);
+        } catch (error) {
+            console.error('Error sending message:', error);
             throw error;
         }
     };
@@ -75,7 +115,9 @@ export function MessagesProvider({ children }) {
             channels,
             createChannel,
             loading,
-            error
+            messagesLoading,
+            error,
+            sendMessage,
         }}>
             {children}
         </MessagesContext.Provider>
