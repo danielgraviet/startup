@@ -21,7 +21,7 @@ printf "\n----> Deploying React bundle $service to $hostname with $key\n"
 printf "\n----> Build the distribution package\n"
 rm -rf build dist
 mkdir build
-mkdir build/service  # Explicitly create service/ directory
+mkdir build/service
 npm install
 npm run build
 cp -r dist build/dist
@@ -42,10 +42,12 @@ scp -r -i "$key" build/* ubuntu@$hostname:services/$service
 # Step 4: Deploy on target
 printf "\n----> Deploy the service on the target\n"
 ssh -i "$key" ubuntu@$hostname << 'ENDSSH'
-export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v20.17.0/bin  # Adjust Node version as needed
+export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v22.12.0/bin  # Updated to v22.12.0 per your logs
 cd services/startup
 npm install
-pm2 restart startup || pm2 start service/index.js --name startup
+pm2 stop startup || true  # Stop if exists, ignore if not
+pm2 delete startup || true  # Delete if exists, ignore if not
+pm2 start service/index.js --name startup
 pm2 save
 ENDSSH
 
