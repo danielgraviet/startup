@@ -146,7 +146,9 @@ export function Messages() {
                             placeholder="Type a message..."
                             className={styles.messageInput}
                         />
-                        <button type="submit" className={styles.sendButton}>Send</button>
+                        <button type="submit" className={styles.sendButton}>
+                            <img src="/pawIcon.png" alt="Send" className={styles.sendIcon} />
+                        </button>
                     </form>
                 )}
             </main>

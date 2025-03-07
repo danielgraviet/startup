@@ -218,6 +218,11 @@ body {
     background-color: #e88b1b;
 }
 
+.sendIcon {
+    width: 24px; /* Adjust size as needed */
+    height: 24px;
+}
+
 /* Removed .sendIcon since no icon is used in JSX yet; add back if you include one */
 
 /* Right Sidebar Styles */
