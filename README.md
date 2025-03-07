@@ -138,11 +138,11 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
+- [X] **Node.js/Express HTTP service** - Implemented an Express server with API routes.
+- [X] **Static middleware for frontend** - Serving static files from public directory.
+- [X] **Calls to third party endpoints** - Added Cat Facts API integration.
+- [X] **Backend service endpoints** - Created endpoints for auth, channels, and messages.
+- [X] **Frontend calls service endpoints** - Frontend interacts with backend via fetch calls.
 
 ## 🚀 DB/Login deliverable
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../css/messages.module.css';
 import { useMessages } from '../context/MessagesContext';
 import { AddChannel } from '../components/AddChannel';
+import { CatFact } from '../components/catFact';
 
 export function Messages() {
     const {
@@ -175,6 +176,11 @@ export function Messages() {
                         <p className={styles.createdDate}>
                             {currentChannel ? new Date(currentChannel.timestamp).toLocaleDateString() : '-'}
                         </p>
+                    </div>
+
+                    <div className={styles.infoSection}>
+                        <h3>Cat Fact</h3>
+                            <CatFact/>
                     </div>
                 </div>
             </aside>
