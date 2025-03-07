@@ -9,7 +9,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static('public')); // Serve static files from public directory
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // In-memory data
 let users = [];
@@ -174,13 +174,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ msg: 'Internal server error', error: err.message });
 });
 
-// Static Fallback (only if public directory exists)
-app.use((req, res, next) => {
-  const publicPath = path.join(__dirname, 'public', 'index.html');
-  if (require('fs').existsSync(publicPath)) {
-    res.sendFile('index.html', { root: 'public' });
+// Fallback to serve React app
+app.get('*', (req, res) => {
+  const distPath = path.join(__dirname, '../dist', 'index.html');
+  if (require('fs').existsSync(distPath)) {
+    res.sendFile(distPath);
   } else {
-    res.status(404).json({ msg: 'Route not found' });
+    res.status(404).json({ msg: 'Frontend not found - run `npm run build` first' });
   }
 });
 
