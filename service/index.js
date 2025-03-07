@@ -52,9 +52,10 @@ async function createChannel(name, description = '') {
     id: uuid.v4(),
     name,
     description,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    members: []
   };
-  
+
   channels.push(channel);
   return channel;
 }
@@ -107,6 +108,7 @@ apiRouter.post('/channel', verifyAuth, async (req, res) => {
   if (!name) return res.status(400).json({ msg: 'Channel name is required' });
   const channel = await createChannel(name, description);
   if (!channel) return res.status(409).json({ msg: 'Channel already exists' });
+  channel.members.push(req.user.username);
   res.json(channel);
 });
 

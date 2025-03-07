@@ -54,6 +54,7 @@ export function Messages() {
 
     console.log("Current Messages:", currentMessages);
     console.log("Current Channel:", currentChannel);
+    
     return (
         <div className={styles.messagesContainer}>
             {/* Left Sidebar */}
