@@ -47,7 +47,14 @@ async function findChannel(name) {
 
 async function createChannel(name, description = '') {
   if (await findChannel(name)) return null;
-  const channel = { id: uuid.v4(), name, description };
+
+  const channel = {
+    id: uuid.v4(),
+    name,
+    description,
+    timestamp: new Date().toISOString()
+  };
+  
   channels.push(channel);
   return channel;
 }

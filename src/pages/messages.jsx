@@ -53,6 +53,7 @@ export function Messages() {
     const currentMessages = messages[currentChat] || []; // Default to empty array
 
     console.log("Current Messages:", currentMessages);
+    console.log("Current Channel:", currentChannel);
     return (
         <div className={styles.messagesContainer}>
             {/* Left Sidebar */}
@@ -169,7 +170,7 @@ export function Messages() {
                     <div className={styles.infoSection}>
                         <h3>Created</h3>
                         <p className={styles.createdDate}>
-                            {currentChannel ? new Date(currentChannel.createdAt).toLocaleDateString() : '-'}
+                            {currentChannel ? new Date(currentChannel.timestamp).toLocaleDateString() : '-'}
                         </p>
                     </div>
                 </div>
