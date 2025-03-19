@@ -11,17 +11,15 @@ async function initializeDb() {
     await client.connect();
     db = client.db('startup');
     console.log('Connected to database');
+    return db;
   } catch (ex) {
-    console.log(`Unable to connect to database with ${url} because ${ex.message}`);
-    process.exit(1);
+    console.error(`Unable to connect to database with ${url} because ${ex.message}`);
+    throw ex; // Let the caller handle the error
   }
 }
 
-// Main setup
-(async () => {
+const DBPromise = (async () => {
   await initializeDb(); // Wait for db to be ready
-
-  console.log('DB initialized:', !!db); // Debug: confirm db is set
 
   const userCollection = () => {
     if (!db) throw new Error('Database not initialized');
@@ -29,7 +27,7 @@ async function initializeDb() {
   };
 
   async function addUser(username, password) {
-    console.log('Starting addUser'); // Debug
+    console.log('Starting addUser');
     if (!username || !password) {
       throw new Error('Username and password are required');
     }
@@ -43,28 +41,56 @@ async function initializeDb() {
     const user = {
       username,
       password: hashedPassword,
+      token: null, // Initialize token field
       createdAt: new Date(),
     };
 
-    try {
-      const result = await userCollection().insertOne(user);
-      console.log('User inserted'); // Debug
-      return result.insertedId;
-    } catch (error) {
-      throw new Error(`Failed to add user: ${error.message}`);
-    }
+    const result = await userCollection().insertOne(user);
+    console.log('User inserted');
+    return result.insertedId;
   }
 
-  // Test
+  async function getUser(username) {
+    return await userCollection().findOne({ username });
+  }
+
+  async function getUserByToken(token) {
+    return await userCollection().findOne({ token });
+  }
+
+  async function updateUser(username, updates) {
+    const result = await userCollection().updateOne(
+      { username },
+      { $set: updates }
+    );
+    return result.modifiedCount > 0;
+  }
+
+  // Return all methods
+  return {
+    addUser,
+    getUser,
+    getUserByToken,
+    updateUser,
+  };
+})();
+
+// Optional: Test code (run separately if needed)
+async function runTest() {
   try {
+    const dbMethods = await DBPromise;
     console.log('Running test');
-    const userId = await addUser('testuser', 'mypassword123');
+    const userId = await dbMethods.addUser('testuser', 'mypassword123');
     console.log(`Added user with ID: ${userId}`);
   } catch (error) {
     console.error(`Error adding user: ${error.message}`);
   } finally {
+    // Only close if running as a standalone test
     await client.close();
   }
+}
 
-  module.exports = { addUser };
-})();
+// Uncomment to run test manually
+// runTest();
+
+module.exports = DBPromise;

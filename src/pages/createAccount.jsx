@@ -39,15 +39,16 @@ export function CreateAccount({ setIsLoggedIn }) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username: formData.username})
+                credentials: 'include',
+                body: JSON.stringify({username: formData.username, password: formData.password})
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                console.log('Account created successfully');
+                console.log('Account created successfully', data);
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', formData.username);
+                localStorage.setItem('currentUser', data.username);
                 setIsLoggedIn(true);
                 navigate('/messages');
             } else {

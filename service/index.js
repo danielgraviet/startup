@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const path = require('path');
-const DB = require('./database.js');
+const DBPromise = require('./database.js');
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -34,12 +34,22 @@ function setAuthCookie(res, authToken) {
 
 async function findUser(field, value) {
   if (!value) return null;
-  return users.find((u) => u[field] === value);
+  if (field === 'username') {
+    return await DB.getUser(value);
+  }
+
+  if (field === 'token') {
+    return await DB.getUserByToken(value); // Assumes you add this method in database.js
+  }
+  return null;
 }
 
-async function createUser(username) {
-  const user = { username, token: uuid.v4() };
-  users.push(user);
+async function createUser(username, password) {
+  console.log("createUser attempt: ", username, password);
+  const token = uuid.v4();
+  const userId = await DB.addUser(username, password); // Store in MongoDB with password
+  const user = { _id: userId, username, token };
+  await DB.updateUser(username, { token }); // Store token in DB
   return user;
 }
 
@@ -74,22 +84,31 @@ const verifyAuth = async (req, res, next) => {
 
 // Authentication Endpoints
 apiRouter.post('/auth/register', async (req, res) => {
-  const { username } = req.body;
-  if (!username) return res.status(400).json({ msg: 'Username is required' });
+  console.log("register attempt: ", req.body);
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ msg: 'Username and password are required' });
+  }
+
   if (await findUser('username', username)) {
     return res.status(409).json({ msg: 'Username already exists' });
   }
-  const user = await createUser(username);
+  const user = await createUser(username, password);
   setAuthCookie(res, user.token);
   res.json({ username: user.username });
 });
 
 apiRouter.post('/auth/login', async (req, res) => {
-  const { username } = req.body;
-  if (!username) return res.status(400).json({ msg: 'Username is required' });
+  console.log("login attempt: ", req.body);
+  const { username, password } = req.body;
+
+  if (!username || !password) return res.status(400).json({ msg: 'Username and password are required' });
+
   const user = await findUser('username', username);
-  if (user) {
+  if (user && await bcrypt.compare(password, user.password)) {
     user.token = uuid.v4();
+    await DB.updateUser(username, { token: user.token });
     setAuthCookie(res, user.token);
     res.json({ username: user.username });
   } else {
@@ -99,9 +118,17 @@ apiRouter.post('/auth/login', async (req, res) => {
 
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
-  if (user) delete user.token;
-  res.clearCookie(authCookieName);
-  res.status(204).end();
+  if (user) {
+    await DB.updateUser(user.username, { token: null });
+    res.clearCookie(authCookieName);
+    res.status(204).end();
+  } else {
+    res.status(401).json({ msg: 'Unauthorized' });
+  }
+});
+
+apiRouter.get('/auth/check', verifyAuth, (req, res) => {
+  res.json({ username: req.user.username });
 });
 
 // Channel and Message Endpoints (unchanged for now)
@@ -142,7 +169,7 @@ apiRouter.post('/messages/:channelId', verifyAuth, (req, res) => {
     return res.status(404).json({ msg: 'Channel not found' });
   }
 
-  const message = { 
+  const message = {
     id: uuid.v4(),
     content,
     sender: user,
@@ -186,7 +213,18 @@ app.get('*', (req, res) => {
   }
 });
 
-// Start Server
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+// Start the app
+async function startApp() {
+  DB = await DBPromise; // Assign the resolved DB to the global variable
+  console.log('Connected to database');
+}
+
+startApp()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Listening on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to start server:', err);
+  });

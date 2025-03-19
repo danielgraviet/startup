@@ -42,7 +42,7 @@ export function Login(props) {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: credentials.username }),
+                body: JSON.stringify({ username: credentials.username, password: credentials.password }),
                 credentials: 'include',
             });
 
