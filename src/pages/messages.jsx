@@ -174,7 +174,7 @@ export function Messages() {
                     <div className={styles.infoSection}>
                         <h3>Created</h3>
                         <p className={styles.createdDate}>
-                            {currentChannel ? new Date(currentChannel.timestamp).toLocaleDateString() : '-'}
+                            {currentChannel ? new Date(currentChannel.createdAt).toLocaleDateString() : '-'}
                         </p>
                     </div>
 
