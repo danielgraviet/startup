@@ -148,7 +148,7 @@ export function Messages() {
                                     <span className={styles.messageSender}>{message.sender || 'User'}:</span>
                                     <span className={styles.messageContent}>{message.content}</span>
                                     <span className={styles.messageTimestamp}>
-                                        {new Date(message.timestamp).toLocaleTimeString()}
+                                        {new Date(message.createdAt).toLocaleTimeString()}
                                     </span>
                                 </div>
                             ))
