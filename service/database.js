@@ -31,6 +31,11 @@ const DBPromise = (async () => {
     return db.collection('channels');
   };
 
+  const messageCollection = () => {
+    if (!db) throw new Error('Database not initialized');
+    return db.collection('messages');
+  };
+
   async function addUser(username, password) {
     console.log('Starting addUser');
     if (!username || !password) {
@@ -129,6 +134,56 @@ const DBPromise = (async () => {
     }
   }
 
+  // message collection methods
+  // add a message to a channel
+  async function addMessage(channelId, content, sender) {
+    if (!channelId || !content || !sender) {
+      throw new Error('Channel ID, content, and sender are required');
+    }
+
+    // verify the channel exists
+    const channel = await channelCollection().findOne({ _id: new ObjectId(channelId) });
+    if (!channel) {
+      throw new Error('Channel not found');
+    }
+
+    const message = {
+      channelId: new ObjectId(channelId),
+      content,
+      sender,
+      createdAt: new Date(),
+    }
+
+    const result = await messageCollection().insertOne(message);
+    return {id: result.insertedId, ...message};
+  }
+
+  // get all messages from a channel
+  async function getMessagesByChannel(channelId) {
+    if (!channelId) {
+      throw new Error('Channel ID is required');
+    }
+    let queryId;
+    try {
+      queryId = new ObjectId(channelId);
+    } catch (e) {
+      console.log(`Invalid ObjectId: ${channelId}, treating as string`);
+      queryId = channelId;
+    }
+    const messages = await messageCollection()
+      .find({ channelId: queryId })
+      .sort({ createdAt: 1 })
+      .toArray();
+    console.log(`Found ${messages.length} messages`);
+    console.log(`Raw messages: ${JSON.stringify(messages)}`); // Add this
+    return messages.map(msg => ({
+      id: msg._id.toString(),
+      content: msg.content,
+      sender: msg.sender,
+      createdAt: msg.createdAt.toISOString(),
+    }));
+  }
+
   // Return all methods
   return {
     addUser,
@@ -139,6 +194,8 @@ const DBPromise = (async () => {
     getChannelByName,
     getAllChannels,
     deleteChannelById,
+    addMessage,
+    getMessagesByChannel,
   };
 })();
 

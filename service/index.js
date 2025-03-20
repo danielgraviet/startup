@@ -70,7 +70,11 @@ async function createChannel(name, description = '', username) {
 }
 
 const verifyAuth = async (req, res, next) => {
+  const token = req.cookies[authCookieName];
+  console.log(`Verifying token: ${token}`); // Add this
+
   const user = await findUser('token', req.cookies[authCookieName]);
+  console.log(`Verifying user: ${user ? user.username : 'No user found'}`); // Add this
   if (user) {
     req.user = user;
     next();
@@ -167,39 +171,38 @@ apiRouter.delete('/channel/:channelId', verifyAuth, async (req, res) => {
 // get message for a channel
 apiRouter.get('/messages/:channelId', verifyAuth, async (req, res) => {
   const { channelId } = req.params;
-  const channelMessages = messages[channelId] || [];
-  res.json(channelMessages);
+  console.log(`Fetching messages for channelId: ${channelId}`); // Add this
+  try {
+    const channelMessages = await DB.getMessagesByChannel(channelId);
+    console.log(`Returning messages: ${JSON.stringify(channelMessages)}`);
+    res.json(channelMessages);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    res.status(500).json({ msg: 'Error fetching messages', error: error.message });
+  }
 });
 
 
 // send a message to a channel
-apiRouter.post('/messages/:channelId', verifyAuth, (req, res) => {
+apiRouter.post('/messages/:channelId', verifyAuth, async (req, res) => {
   const { channelId } = req.params;
   const { content } = req.body;
-  const user = req.user.username;
+  const sender = req.user.username;
 
   if (!content) {
     return res.status(400).json({ msg: 'Content is required' });
   }
 
-  const channel = channels.find((c) => c.id === channelId);
-  if (!channel) {
-    return res.status(404).json({ msg: 'Channel not found' });
+  // Verify channel exists (handled in addMessage, but you could add extra check here if needed)
+  try {
+    const message = await DB.addMessage(channelId, content, sender);
+    res.status(201).json(message);
+  } catch (error) {
+    if (error.message === 'Channel not found') {
+      return res.status(404).json({ msg: 'Channel not found' });
+    }
+    res.status(500).json({ msg: 'Error sending message', error: error.message });
   }
-
-  const message = {
-    id: uuid.v4(),
-    content,
-    sender: user,
-    timestamp: new Date().toISOString()
-  };
-
-  if (!messages[channelId]) {
-    messages[channelId] = [];
-  }
-
-  messages[channelId].push(message);
-  res.status(201).json(message);
 });
 
 
