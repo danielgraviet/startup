@@ -26,6 +26,11 @@ const DBPromise = (async () => {
     return db.collection('users');
   };
 
+  const channelCollection = () => {
+    if (!db) throw new Error('Database not initialized');
+    return db.collection('channels');
+  };
+
   async function addUser(username, password) {
     console.log('Starting addUser');
     if (!username || !password) {
@@ -66,12 +71,58 @@ const DBPromise = (async () => {
     return result.modifiedCount > 0;
   }
 
+
+  // Channel Collection methods
+
+  // add channel with params of channelName and username(creator)
+  async function addChannel(channelName, username) {
+    console.log('Starting addChannel');
+
+    // check if channel name is provided
+    if (!channelName || !username) {
+      console.log('Channel name and username are required', channelName, username);
+      throw new Error('Channel name and username are required');
+    }
+
+    // check if channel already exists
+    const existingChannel = await channelCollection().findOne({ name: channelName });
+    if (existingChannel) {
+      throw new Error('Channel already exists');
+    }
+
+    // how does the members field work? I want to add the creator of the channel to the members array
+    const channel = {
+      name: channelName,
+      description: '',
+      members: [username],
+      createdAt: new Date(),
+    }
+
+    const result = await channelCollection().insertOne(channel);
+
+    console.log('Channel inserted');
+    return result.insertedId;    
+  }
+
+  // get channel by name
+  async function getChannelByName(channelName) {
+    return await channelCollection().findOne({ name: channelName }); // what does this return?
+  }
+
+  // get all channels
+  async function getAllChannels() {
+    return await channelCollection().find({}).toArray();
+  }
+
   // Return all methods
   return {
     addUser,
     getUser,
     getUserByToken,
     updateUser,
+    addChannel,
+    getChannelByName,
+    getAllChannels,
   };
 })();
 

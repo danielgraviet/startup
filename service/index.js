@@ -54,22 +54,19 @@ async function createUser(username, password) {
 }
 
 async function findChannel(name) {
-  return channels.find((c) => c.name === name);
+  return await DB.getChannelByName(name);
 }
 
-async function createChannel(name, description = '') {
-  if (await findChannel(name)) return null;
+async function createChannel(name, description = '', username) {
+  const existingChannel = await findChannel(name);
 
-  const channel = {
-    id: uuid.v4(),
-    name,
-    description,
-    timestamp: new Date().toISOString(),
-    members: []
-  };
+  if (existingChannel) {
+    console.log('Channel already exists');
+    return null;
+  }
 
-  channels.push(channel);
-  return channel;
+  const channelId = await DB.addChannel(name, username);
+  return {id: channelId, name, description, members: [username]};
 }
 
 const verifyAuth = async (req, res, next) => {
@@ -133,15 +130,19 @@ apiRouter.get('/auth/check', verifyAuth, (req, res) => {
 
 // Channel and Message Endpoints (unchanged for now)
 apiRouter.post('/channel', verifyAuth, async (req, res) => {
+  // this part gets the name and description from the request body, & checks them.
   const { name, description } = req.body;
   if (!name) return res.status(400).json({ msg: 'Channel name is required' });
-  const channel = await createChannel(name, description);
+
+  // this part creates the channel
+  const channel = await createChannel(name, description, req.user.username);
   if (!channel) return res.status(409).json({ msg: 'Channel already exists' });
-  channel.members.push(req.user.username);
   res.json(channel);
 });
 
-apiRouter.get('/channels', verifyAuth, (_req, res) => {
+apiRouter.get('/channels', verifyAuth, async (_req, res) => {
+  // fetches all channels from the database
+  const channels = await DB.getAllChannels(); 
   res.json(channels);
 });
 
