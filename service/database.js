@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const config = require('./mongoConfig.json');
 
@@ -114,6 +114,21 @@ const DBPromise = (async () => {
     return await channelCollection().find({}).toArray();
   }
 
+  // delete channel by id
+  async function deleteChannelById(channelId) {
+    console.log(`Deleting channel from DB with ID: ${channelId}`);
+    try {
+      const result = await channelCollection().deleteOne({
+        _id: new ObjectId(channelId),
+      });
+      console.log(`DB delete result: ${result.deletedCount}`);
+      return result.deletedCount > 0;
+    } catch (err) {
+      console.error('Error in deleteChannel:', err.stack);
+      throw err;
+    }
+  }
+
   // Return all methods
   return {
     addUser,
@@ -123,6 +138,7 @@ const DBPromise = (async () => {
     addChannel,
     getChannelByName,
     getAllChannels,
+    deleteChannelById,
   };
 })();
 

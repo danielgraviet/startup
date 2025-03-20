@@ -103,6 +103,42 @@ body {
     text-overflow: ellipsis;
 }
 
+.channelItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .channelButton {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+  }
+  
+  .channelButton.active {
+    background-color: gray;
+    color: white;
+  }
+  
+  .deleteButton {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .deleteButton:hover {
+    background-color: #cc0000;
+  }
+
 /* Main Chat Area Styles */
 .chatArea {
     display: flex;

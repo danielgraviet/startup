@@ -14,6 +14,7 @@ export function Messages() {
         messagesLoading, // Messages loading
         error,
         sendMessage,
+        deleteChannel,
     } = useMessages();
     const [searchQuery, setSearchQuery] = useState('');
     const [messageInput, setMessageInput] = useState(''); // For sending messages
@@ -33,6 +34,15 @@ export function Messages() {
 
     const handleChannelClick = (channelId) => {
         setCurrentChat(channelId);
+    };
+
+    const handleDeleteChannel = async (channelId) => {
+        try {
+            await deleteChannel(channelId);
+            console.log(`Deleted channel: ${channelId}`);
+        } catch (err) {
+            console.error('Failed to delete channel:', err);
+        }
     };
 
     const handleSearch = (e) => {
@@ -89,8 +99,8 @@ export function Messages() {
                     ) : filteredChannels.length > 0 ? (
                         <div className={styles.channelButtons}>
                             {filteredChannels.map(channel => (
+                                <div key={channel.id} className={styles.channelItem}>
                                 <button
-                                    key={channel.id}
                                     className={`${styles.channelButton} ${currentChat === channel.id ? styles.active : ''}`}
                                     onClick={() => handleChannelClick(channel.id)}
                                 >
@@ -99,6 +109,13 @@ export function Messages() {
                                         <span className={styles.channelName}>{channel.name}</span>
                                     </div>
                                 </button>
+                                <button
+                                    className={styles.deleteButton}
+                                    onClick={() => handleDeleteChannel(channel.id)}
+                                >
+                                    X
+                                </button>
+                            </div>
                             ))}
                         </div>
                     ) : searchQuery ? (

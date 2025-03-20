@@ -128,7 +128,7 @@ apiRouter.get('/auth/check', verifyAuth, (req, res) => {
   res.json({ username: req.user.username });
 });
 
-// Channel and Message Endpoints (unchanged for now)
+// CHANNEL ENDPOINTS
 apiRouter.post('/channel', verifyAuth, async (req, res) => {
   // this part gets the name and description from the request body, & checks them.
   const { name, description } = req.body;
@@ -144,6 +144,23 @@ apiRouter.get('/channels', verifyAuth, async (_req, res) => {
   // fetches all channels from the database
   const channels = await DB.getAllChannels(); 
   res.json(channels);
+});
+
+apiRouter.delete('/channel/:channelId', verifyAuth, async (req, res) => {
+  const { channelId } = req.params;
+  console.log(`Received DELETE request for channel: ${channelId}`);
+  try {
+    const deleted = await DB.deleteChannelById(channelId);
+    console.log(`Delete result: ${deleted}`);
+    if (deleted) {
+      res.status(204).end();
+    } else {
+      res.status(404).json({ msg: 'Channel not found' });
+    }
+  } catch (err) {
+    console.error('Error in DELETE /channel/:channelId:', err.stack);
+    res.status(500).json({ msg: 'Error deleting channel', error: err.message });
+  }
 });
 
 // MESSAGE ENDPOINTS
