@@ -22,7 +22,12 @@ export function MessagesProvider({ children }) {
                 const response = await fetch('/api/channels', { credentials: 'include' });
                 if (response.ok) {
                     const data = await response.json();
-                    setChannels(data);
+                    const normalizedChannels = data.map(channel => ({
+                        ...channel,
+                        id: channel._id, // normalize _id to id
+                    }));
+                    setChannels(normalizedChannels);
+                    console.log("Normalized Channels:", normalizedChannels);
                     setError(null);
                 } else {
                     throw new Error('Failed to fetch channels');
@@ -73,10 +78,12 @@ export function MessagesProvider({ children }) {
                 throw new Error(data.msg || 'Failed to create channel');
             }
             const newChannel = await response.json();
-            setChannels(prev => [...prev, newChannel]);
-            setCurrentChat(newChannel.id);
-            setMessages(prev => ({ ...prev, [newChannel.id]: [] }));
-            return newChannel.id;
+            const normalizedChannel = {...newChannel, id: newChannel.id};
+            setChannels(prev => [...prev, normalizedChannel]);
+            setCurrentChat(normalizedChannel.id);
+            setMessages(prev => ({ ...prev, [normalizedChannel.id]: [] }));
+            console.log("New Channel Created:", normalizedChannel);
+            return normalizedChannel.id;
         } catch (error) {
             console.error('Error creating channel:', error);
             throw error;

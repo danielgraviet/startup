@@ -26,6 +26,7 @@ export function Messages() {
     // Set initial channel if none selected
     useEffect(() => {
         if (channels.length > 0 && !currentChat) {
+            console.log("Setting current chat to:", channels[0].id);
             setCurrentChat(channels[0].id);
         }
     }, [channels, currentChat, setCurrentChat]);
@@ -53,8 +54,13 @@ export function Messages() {
     const currentChannel = channels.find(channel => channel.id === currentChat);
     const currentMessages = messages[currentChat] || []; // Default to empty array
 
-    console.log("Current Messages:", currentMessages);
+  
+
+    console.log("Current Chat ID:", currentChat);
     console.log("Current Channel:", currentChannel);
+    console.log("Current Messages:", currentMessages);
+    console.log("Channels:", channels);
+
     
     return (
         <div className={styles.messagesContainer}>
