@@ -25,7 +25,8 @@ mkdir build/service
 npm install
 npm run build
 cp -r dist build/dist
-cp service/index.js build/service/
+cp service/*.js build/service/
+cp service/mongoConfig.json build/service/
 cp package.json build
 
 # Step 2: Clear previous distribution
