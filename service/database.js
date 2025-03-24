@@ -36,6 +36,11 @@ const DBPromise = (async () => {
     return db.collection('messages');
   };
 
+  const formCollection = () => {
+    if (!db) throw new Error('Database not initialized');
+    return db.collection('forms');
+  };
+
   async function addUser(username, password) {
     console.log('Starting addUser');
     if (!username || !password) {
@@ -184,6 +189,33 @@ const DBPromise = (async () => {
     }));
   }
 
+  // form collection methods
+  async function addForm(email, name, message) {
+    // generate a unique id for the form
+    const { v4: uuidv4 } = require('uuid');
+
+    if (!email || !name || !message) {
+      throw new Error('All fields are required');
+    }
+
+    // check if form already exists
+    const existingForm = await formCollection().findOne({ email });
+    if (existingForm) {
+      throw new Error('A form with this email already exists');
+    }
+
+    const form = {
+      email,
+      name,
+      message,
+      createdAt: new Date(),
+      id: uuidv4(),
+    }
+
+    const result = await formCollection().insertOne(form);
+    return {id: form.id, ...form};
+  }
+
   // Return all methods
   return {
     addUser,
@@ -196,6 +228,7 @@ const DBPromise = (async () => {
     deleteChannelById,
     addMessage,
     getMessagesByChannel,
+    addForm,
   };
 })();
 

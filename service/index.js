@@ -207,11 +207,19 @@ apiRouter.post('/messages/:channelId', verifyAuth, async (req, res) => {
 
 
 // Contact Endpoints
-apiRouter.post('/contact', verifyAuth, (req, res) => {
+apiRouter.post('/contact', verifyAuth, async (req, res) => {
   const { email, name, message } = req.body;
 
   if (!email || !name || !message) {
     return res.status(400).json({ msg: 'All fields are required' });
+  }
+
+  try {
+    const form = await DB.addForm(email, name, message);
+    console.log('Form submitted:', form);
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    return res.status(500).json({ msg: 'Error submitting form', error: error.message });
   }
 
   console.log('Received contact form submission:', { email, name, message });
