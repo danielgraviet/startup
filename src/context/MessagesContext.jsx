@@ -45,6 +45,56 @@ export function MessagesProvider({ children }) {
     }, [currentUser]);
 
     useEffect(() => {
+        const ws = new WebSocket('ws://localhost:4000');
+
+        ws.onopen = () => {
+            console.log('WebSocket connected');
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log('WebSocket message received:', data);
+            if (data.type === 'channelCreated') {
+                const newChannel = { ...data.channel, id: data.channel.id };
+                setChannels(prev => {
+                    if (prev.some(c => c.id === newChannel.id)) return prev;
+                    console.log('Adding new channel:', newChannel);
+                    return [...prev, newChannel];
+                });
+                setMessages(prev => ({
+                    ...prev,
+                    [newChannel.id]: prev[newChannel.id] || [],
+                }));
+            } else if (data.type === 'channelDeleted') {
+                const channelId = data.channelId;
+                console.log('Deleting channel:', channelId);
+                setChannels(prev => prev.filter(channel => channel.id !== channelId));
+                if (currentChat === channelId) {
+                    setCurrentChat(channels.length > 1 ? channels[0]?.id : null);
+                }
+                setMessages(prev => {
+                    const newMessages = { ...prev };
+                    delete newMessages[channelId];
+                    return newMessages;
+                });
+            }
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket disconnected');
+        };
+
+        ws.onerror = (err) => {
+            console.error('WebSocket error:', err);
+        };
+
+        return () => {
+            console.log('Closing WebSocket');
+            ws.close();
+        };
+    }, [currentChat, channels]);
+
+    useEffect(() => {
         const fetchMessages = async () => {
             if (!currentChat) return;
             try {

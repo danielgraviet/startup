@@ -5,6 +5,7 @@ const uuid = require('uuid');
 const path = require('path');
 const DBPromise = require('./database.js');
 const { peerProxy } = require('./peerProxy.js')
+const WebSocket = require('ws');
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -142,6 +143,15 @@ apiRouter.post('/channel', verifyAuth, async (req, res) => {
   // this part creates the channel
   const channel = await createChannel(name, description, req.user.username);
   if (!channel) return res.status(409).json({ msg: 'Channel already exists' });
+
+  // websocket implementation
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      console.log('Sending to client:', client.readyState);
+      client.send(JSON.stringify({type: 'channelCreated', channel}))
+    }
+  })
+
   res.json(channel);
 });
 
@@ -153,18 +163,17 @@ apiRouter.get('/channels', verifyAuth, async (_req, res) => {
 
 apiRouter.delete('/channel/:channelId', verifyAuth, async (req, res) => {
   const { channelId } = req.params;
-  console.log(`Received DELETE request for channel: ${channelId}`);
-  try {
-    const deleted = await DB.deleteChannelById(channelId);
-    console.log(`Delete result: ${deleted}`);
-    if (deleted) {
-      res.status(204).end();
-    } else {
-      res.status(404).json({ msg: 'Channel not found' });
-    }
-  } catch (err) {
-    console.error('Error in DELETE /channel/:channelId:', err.stack);
-    res.status(500).json({ msg: 'Error deleting channel', error: err.message });
+  const deleted = await DB.deleteChannelById(channelId);
+  if (deleted) {
+    // Broadcast channel deletion
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ type: 'channelDeleted', channelId }));
+      }
+    });
+    res.status(204).end();
+  } else {
+    res.status(404).json({ msg: 'Channel not found' });
   }
 });
 
@@ -245,12 +254,13 @@ app.get('*', (req, res) => {
 
 // Start the app
 let DB;
+let wss;
 const httpServer = app.listen(port, () => {
   console.log(`Listening on port ${port}`)
 })
 
-// integrate the wss 
-const wss = peerProxy(httpServer)
+// integrate the wss
+wss = peerProxy(httpServer)
 
 
 async function startApp() {
