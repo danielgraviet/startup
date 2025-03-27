@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const path = require('path');
 const DBPromise = require('./database.js');
+const { peerProxy } = require('./peerProxy.js')
 
 const app = express();
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
@@ -243,6 +244,15 @@ app.get('*', (req, res) => {
 });
 
 // Start the app
+let DB;
+const httpServer = app.listen(port, () => {
+  console.log(`Listening on port ${port}`)
+})
+
+// integrate the wss 
+const wss = peerProxy(httpServer)
+
+
 async function startApp() {
   DB = await DBPromise; // Assign the resolved DB to the global variable
   console.log('Connected to database');
@@ -250,9 +260,7 @@ async function startApp() {
 
 startApp()
   .then(() => {
-    app.listen(port, () => {
-      console.log(`Listening on port ${port}`);
-    });
+    // server is already started above
   })
   .catch((err) => {
     console.error('Failed to start server:', err);
