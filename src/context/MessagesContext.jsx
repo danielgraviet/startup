@@ -21,7 +21,6 @@ export function MessagesProvider({ children }) {
                 setLoading(true);
                 console.log('Fetching channels from /api/channels');
                 const response = await fetch('/api/channels', { credentials: 'include' });
-                console.log('Fetch channels response:', response.status);
                 if (response.ok) {
                     const data = await response.json();
                     const normalizedChannels = data.map(channel => ({
@@ -29,7 +28,6 @@ export function MessagesProvider({ children }) {
                         id: channel._id,
                     }));
                     setChannels(normalizedChannels);
-                    console.log("Normalized Channels:", normalizedChannels);
                     setError(null);
                 } else {
                     throw new Error('Failed to fetch channels');
@@ -101,7 +99,6 @@ export function MessagesProvider({ children }) {
                 setMessagesLoading(true);
                 console.log(`Fetching messages from /api/messages/${currentChat}`);
                 const response = await fetch(`/api/messages/${currentChat}`, { credentials: 'include' });
-                console.log('Fetch messages response:', response.status);
                 if (response.ok) {
                     const data = await response.json();
                     setMessages(prev => ({ ...prev, [currentChat]: data }));
@@ -128,16 +125,16 @@ export function MessagesProvider({ children }) {
                 credentials: 'include',
                 body: JSON.stringify({ name, description: '' }),
             });
-            console.log('Create channel response:', response.status);
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.msg || 'Failed to create channel');
             }
             const newChannel = await response.json();
             const normalizedChannel = { ...newChannel, id: newChannel.id };
-            setChannels(prev => [...prev, normalizedChannel]);
-            setCurrentChat(normalizedChannel.id);
-            setMessages(prev => ({ ...prev, [normalizedChannel.id]: [] }));
+            // Remove these lines to avoid duplicate addition:
+            // setChannels(prev => [...prev, normalizedChannel]);
+            // setCurrentChat(normalizedChannel.id);
+            // setMessages(prev => ({ ...prev, [normalizedChannel.id]: [] }));
             console.log("New Channel Created:", normalizedChannel);
             return normalizedChannel.id;
         } catch (error) {
@@ -153,11 +150,8 @@ export function MessagesProvider({ children }) {
                 method: 'DELETE',
                 credentials: 'include',
             });
-            console.log('DELETE response status:', response.status);
-            console.log('DELETE response headers:', [...response.headers.entries()]);
             if (!response.ok) {
                 const data = await response.json();
-                console.log('DELETE error response:', data);
                 throw new Error(data.msg || 'Failed to delete channel');
             }
             setChannels(prev => prev.filter(channel => channel.id !== channelId));
@@ -185,7 +179,6 @@ export function MessagesProvider({ children }) {
                 credentials: 'include',
                 body: JSON.stringify({ content }),
             });
-            console.log('Send message response:', response.status);
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.msg || 'Failed to send message');
