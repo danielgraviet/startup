@@ -75,6 +75,13 @@ export function MessagesProvider({ children }) {
                     delete newMessages[channelId];
                     return newMessages;
                 });
+            } else if (data.type === 'newMessage') {
+                const { channelId, message} = data;
+                console.log('New message received for channel: ', channelId, message);
+                setMessages(prev => ({
+                    ...prev,
+                    [channelId]: [...(prev[channelId] || []), message],
+                }));
             }
         };
 

@@ -203,9 +203,20 @@ apiRouter.post('/messages/:channelId', verifyAuth, async (req, res) => {
     return res.status(400).json({ msg: 'Content is required' });
   }
 
-  // Verify channel exists (handled in addMessage, but you could add extra check here if needed)
   try {
     const message = await DB.addMessage(channelId, content, sender);
+    
+    // Broadcast the new message to all WebSocket clients
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: 'newMessage',
+          channelId,
+          message,
+        }));
+      }
+    });
+
     res.status(201).json(message);
   } catch (error) {
     if (error.message === 'Channel not found') {
