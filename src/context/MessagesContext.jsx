@@ -2,6 +2,20 @@ import React, { createContext, useContext, useState, useEffect, useRef, useCallb
 
 const MessagesContext = createContext();
 
+// --- Determine WebSocket URL ---
+// Use Vite's environment variable syntax (import.meta.env)
+// Prefixed with VITE_ as required by Vite for client-side exposure.
+const wsUrlFromEnv = import.meta.env.VITE_WEBSOCKET_URL;
+const defaultWsUrl = 'ws://localhost:4000'; // Fallback for local development
+
+// Choose the correct URL based on environment variable availability
+// In production build, wsUrlFromEnv should be set (e.g., "wss://startup.catnipmessaging.click")
+// In local development (npm run dev), wsUrlFromEnv will likely be undefined, using the default.
+const wsUrl = wsUrlFromEnv || defaultWsUrl;
+
+// Log the URL resolution for debugging during development or checking production build
+console.log(`[MessagesContext] Using WebSocket URL: ${wsUrl} (Source: ${wsUrlFromEnv ? 'Environment Variable' : 'Default'})`);
+
 export function MessagesProvider({ children }) {
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState({});
@@ -32,28 +46,34 @@ export function MessagesProvider({ children }) {
 
     // --- Stable WebSocket Message Handler using useCallback and Refs ---
     const handleWebSocketMessage = useCallback((event) => {
+        let data; // Define data outside try block for error logging
         try {
-             const data = JSON.parse(event.data);
-             console.log('WebSocket message received:', data);
+             // Log raw data before parsing for debugging potential server issues
+             console.log('[WS Message Received Raw]', event.data);
+             data = JSON.parse(event.data);
+             console.log('[WS Message Parsed]', data);
 
              if (data.type === 'channelCreated') {
-                const newChannel = { ...data.channel, id: data.channel.id }; // Assuming server sends id/_id consistently
+                const newChannel = { ...data.channel, id: data.channel.id || data.channel._id }; // Normalize ID
                 setChannels(prev => {
                     if (prev.some(c => c.id === newChannel.id)) {
-                        console.log('Channel already exists, skipping add:', newChannel.id);
+                        console.log('[WS ChannelCreated] Channel already exists, skipping add:', newChannel.id);
                         return prev;
                     }
-                    console.log('Adding new channel:', newChannel);
+                    console.log('[WS ChannelCreated] Adding new channel:', newChannel);
                     return [...prev, newChannel];
                 });
                 // Initialize messages for the new channel
-                setMessages(prev => ({
-                    ...prev,
-                    [newChannel.id]: prev[newChannel.id] || [],
-                }));
+                setMessages(prev => {
+                    console.log(`[WS ChannelCreated] Initializing messages for new channel ${newChannel.id}`);
+                    return {
+                       ...prev,
+                       [newChannel.id]: prev[newChannel.id] || [],
+                    };
+                });
              } else if (data.type === 'channelDeleted') {
                  const channelId = data.channelId;
-                 console.log('Deleting channel:', channelId);
+                 console.log('[WS ChannelDeleted] Deleting channel:', channelId);
 
                  // Update channels state first
                  setChannels(prev => prev.filter(channel => channel.id !== channelId));
@@ -61,10 +81,9 @@ export function MessagesProvider({ children }) {
                  // Check if the *deleted* channel was the *current* one using the Ref
                  if (currentChatRef.current === channelId) {
                      // Use the Ref to get the list of channels *before* this deletion triggered the state update
-                     // Filter *that* list to find remaining channels
                      const remainingChannels = channelsRef.current.filter(c => c.id !== channelId);
                      const nextChat = remainingChannels.length > 0 ? remainingChannels[0]?.id : null;
-                     console.log(`Current chat ${channelId} deleted, switching to ${nextChat}`);
+                     console.log(`[WS ChannelDeleted] Current chat ${channelId} deleted, switching to ${nextChat}`);
                      // Update the currentChat state
                      setCurrentChat(nextChat);
                  }
@@ -73,16 +92,17 @@ export function MessagesProvider({ children }) {
                  setMessages(prev => {
                      const newMessages = { ...prev };
                      delete newMessages[channelId];
+                     console.log(`[WS ChannelDeleted] Removing messages for channel ${channelId}`);
                      return newMessages;
                  });
 
              } else if (data.type === 'newMessage') {
                  const { channelId, message } = data;
                  if (!channelId || !message) {
-                    console.warn('Received invalid newMessage data:', data);
+                    console.warn('[WS NewMessage] Received invalid newMessage data:', data);
                     return;
                  }
-                 console.log('New message received for channel: ', channelId, message);
+                 console.log('[WS NewMessage] Received for channel: ', channelId, message);
 
                  // Ensure message has a unique ID from the server (e.g., message._id or message.id)
                  const messageId = message.id || message._id; // Adapt based on your message structure
@@ -91,122 +111,166 @@ export function MessagesProvider({ children }) {
                     const channelMessages = prev[channelId] || [];
                     // Prevent adding duplicate message by ID if available and valid
                     if (messageId && channelMessages.some(msg => (msg.id || msg._id) === messageId)) {
-                        console.log(`Message ${messageId} already exists in channel ${channelId}, skipping.`);
+                        console.log(`[WS NewMessage] Message ${messageId} already exists in channel ${channelId}, skipping.`);
                         return prev; // Return previous state unchanged
                     }
                     // Add the new message
+                     console.log(`[WS NewMessage] Adding message ${messageId || '(no id)'} to channel ${channelId}`);
                     return {
                         ...prev,
                         [channelId]: [...channelMessages, message],
                     };
                  });
+             } else {
+                 console.warn('[WS Unknown Type] Received message with unknown type:', data.type, data);
              }
         } catch (error) {
-            console.error("Error parsing WebSocket message or updating state:", error, event.data);
+            console.error("[WS Message Error] Error parsing WebSocket message or updating state:", error);
+            console.error("[WS Message Error] Original event data:", event?.data); // Log raw data on error
+            console.error("[WS Message Error] Parsed data (if available):", data); // Log parsed data if parse succeeded before error
+            // Optionally set an error state for the UI
+            // setError("Error processing real-time update.");
         }
-        // IMPORTANT: Empty dependency array means this function definition itself never changes.
-        // It relies on the Refs being updated by their own useEffects to get fresh state.
-    }, []);
+    }, []); // Empty dependency array ensures this function reference is stable
 
 
     // --- Effect to Fetch Initial Channels ---
     useEffect(() => {
         const fetchChannels = async () => {
-            // Optional: Check if channels are already loaded or if currentUser exists
-            if (!currentUser || channels.length > 0) {
-                 // setLoading(false); // Consider if loading state needs adjustment here
+            if (!currentUser) {
+                setLoading(false); // Ensure loading stops if no user
                 return;
             }
+            // Avoid refetch if channels are already loaded? Optional optimization.
+            // if (channels.length > 0) return;
+
             try {
                 setLoading(true);
-                console.log('Fetching channels from /api/channels');
+                setError(null); // Clear previous errors
+                console.log('[API FetchChannels] Fetching from /api/channels');
                 const response = await fetch('/api/channels', { credentials: 'include' });
                 if (response.ok) {
                     const data = await response.json();
-                    // Normalize channel ID, ensure it matches WebSocket 'id' field
                     const normalizedChannels = data.map(channel => ({
                         ...channel,
                         id: channel.id || channel._id, // Use 'id' consistently
                     }));
+                    console.log('[API FetchChannels] Received channels:', normalizedChannels);
                     setChannels(normalizedChannels);
-                    // Maybe set initial currentChat here if not set?
+                    // Optionally set initial chat if none is set
                     // if (!currentChat && normalizedChannels.length > 0) {
                     //    setCurrentChat(normalizedChannels[0].id);
                     // }
-                    setError(null);
                 } else {
-                    const errorData = await response.text(); // Get more error details
-                    console.error('Failed to fetch channels:', response.status, errorData);
+                    const errorData = await response.text();
+                    console.error('[API FetchChannels] Failed:', response.status, errorData);
                     throw new Error(`Failed to fetch channels (status: ${response.status})`);
                 }
             } catch (error) {
-                console.error('Error fetching channels:', error);
+                console.error('[API FetchChannels] Error:', error);
                 setError(error.message);
             } finally {
                 setLoading(false);
             }
         };
         fetchChannels();
-        // Dependency: Re-fetch if currentUser changes (e.g., on login/logout)
-        // Or keep empty [] if channels should only be fetched once per provider mount
-    }, [currentUser]); // Adjust dependency as needed
+    }, [currentUser]); // Re-fetch if user changes
 
     // --- Effect for WebSocket Connection ---
     useEffect(() => {
-        // Only establish connection if user is logged in (optional but good practice)
         if (!currentUser) {
-            console.log("No current user, WebSocket not connecting.");
-            return;
+            console.log("[WS Setup] No current user, WebSocket not connecting.");
+            return; // Don't connect if not logged in
         }
 
-        console.log('Setting up WebSocket connection...');
-        const ws = new WebSocket('ws://localhost:4000'); // Use env variable for URL in production
+        // wsUrl is defined outside and derived from env var, stable for the component lifetime
+        console.log(`[WS Setup] Attempting WebSocket connection to: ${wsUrl}`);
+        let ws; // Declare ws here to be accessible in cleanup
 
-        ws.onopen = () => console.log('WebSocket connected');
-        ws.onclose = () => console.log('WebSocket disconnected');
-        ws.onerror = (err) => console.error('WebSocket error:', err);
+        try {
+            // Create the WebSocket instance using the resolved URL
+            ws = new WebSocket(wsUrl);
+        } catch (error) {
+             console.error(`[WS Setup] Error creating WebSocket instance with URL ${wsUrl}:`, error);
+             setError(`Failed to establish WebSocket connection. Check console & configuration.`);
+             return; // Stop the effect if the constructor fails
+        }
 
-        // Assign the stable message handler function
+        ws.onopen = () => {
+            console.log(`[WS Status] WebSocket connected successfully to ${wsUrl}`);
+            setError(null); // Clear connection errors on successful open
+        };
+
+        ws.onclose = (event) => {
+            // Log close event details for debugging unexpected disconnects
+            console.log(`[WS Status] WebSocket disconnected from ${wsUrl}. Code: ${event.code}, Reason: '${event.reason || 'No reason given'}', Clean disconnect: ${event.wasClean}`);
+             // Optional: Set an error state if the disconnect was unclean
+             // if (!event.wasClean) {
+             //    setError(`WebSocket disconnected unexpectedly (Code: ${event.code}). Real-time updates stopped.`);
+             // }
+        };
+
+        ws.onerror = (errorEvent) => {
+            // Log the specific error event - this often precedes an onclose event
+            console.error(`[WS Status] WebSocket error for connection to ${wsUrl}:`, errorEvent);
+            // Update error state to inform the user
+            setError('WebSocket connection error. Real-time features may be unavailable. Check console.');
+        };
+
+        // Assign the stable message handler function (defined with useCallback)
         ws.onmessage = handleWebSocketMessage;
 
-        // Cleanup function runs ONLY on component unmount (or if currentUser changes causing reconnect)
+        // Cleanup function: Close the WebSocket when the component unmounts or dependencies change
         return () => {
-            console.log('Closing WebSocket connection (on unmount or user change)');
-            ws.close();
+            if (ws) {
+                 console.log(`[WS Cleanup] Closing WebSocket connection to ${wsUrl}`);
+                 // Remove listeners? Usually not needed if ws object is discarded.
+                 // ws.onopen = null; ws.onmessage = null; ws.onerror = null; ws.onclose = null;
+                 ws.close();
+            } else {
+                console.log(`[WS Cleanup] No WebSocket instance to close (likely connection failed).`);
+            }
         };
-        // Dependency: Connect only once, or reconnect if user changes
-    }, [currentUser, handleWebSocketMessage]); // handleWebSocketMessage is stable due to useCallback([])
+        // Dependencies: Reconnect if the user logs in/out.
+        // handleWebSocketMessage is stable due to useCallback([]).
+        // wsUrl is derived from env vars and doesn't change after initial load, so not needed here.
+    }, [currentUser, handleWebSocketMessage]);
 
     // --- Effect to Fetch Messages for Current Chat ---
     useEffect(() => {
         const fetchMessages = async () => {
-            // Don't fetch if no chat is selected or if messages for this chat are already loaded/loading
-            if (!currentChat || messagesLoading) return;
+            if (!currentChat) {
+                console.log('[API FetchMessages] No current chat selected, skipping fetch.');
+                // Optionally clear messages or set loading to false if needed
+                // setMessagesLoading(false);
+                return;
+            }
 
-            // Optional: Check if messages for currentChat already exist
-            // if(messages[currentChat] && messages[currentChat].length > 0) {
-            //     console.log(`Messages for ${currentChat} already likely loaded.`);
-            //     return;
-            // }
+            // Avoid fetching if already loading
+            if (messagesLoading) {
+                 console.log(`[API FetchMessages] Already loading messages for ${currentChat}, skipping.`);
+                 return;
+            }
 
             try {
                 setMessagesLoading(true);
-                console.log(`Fetching messages from /api/messages/${currentChat}`);
+                setError(null); // Clear previous errors
+                console.log(`[API FetchMessages] Fetching messages for chat ${currentChat} from /api/messages/${currentChat}`);
                 const response = await fetch(`/api/messages/${currentChat}`, { credentials: 'include' });
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(`[API FetchMessages] Received ${data.length} messages for chat ${currentChat}`);
                     // Set messages ensuring not to overwrite other channels' messages
                     setMessages(prev => ({ ...prev, [currentChat]: data }));
-                    setError(null);
                 } else {
                     const errorData = await response.text();
-                    console.error('Failed to fetch messages:', response.status, errorData);
+                    console.error(`[API FetchMessages] Failed for chat ${currentChat}:`, response.status, errorData);
                     throw new Error(`Failed to fetch messages (status: ${response.status})`);
                 }
             } catch (error) {
-                console.error('Error fetching messages:', error);
+                console.error(`[API FetchMessages] Error for chat ${currentChat}:`, error);
                 setError(error.message);
-                // Clear messages for this chat on error? Or keep stale data?
+                // Clear messages for this chat on error? Or keep stale data? Decide based on UX needs.
                 // setMessages(prev => ({ ...prev, [currentChat]: [] }));
             } finally {
                 setMessagesLoading(false);
@@ -216,33 +280,33 @@ export function MessagesProvider({ children }) {
     }, [currentChat]); // Re-fetch when currentChat changes
 
     // --- Action Functions (Create, Delete, Send) ---
+    // These should primarily trigger API calls. State updates ideally come via WebSocket.
 
     const createChannel = async (name) => {
         if (!currentUser) throw new Error("User not logged in");
         try {
-            console.log('Creating channel with POST to /api/channel');
+            setError(null); // Clear previous errors
+            console.log('[API CreateChannel] Sending POST to /api/channel with name:', name);
             const response = await fetch('/api/channel', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ name, description: '' }), // Add description if needed
+                body: JSON.stringify({ name, description: '' }),
             });
             if (!response.ok) {
                 const data = await response.json();
+                console.error('[API CreateChannel] Failed:', response.status, data);
                 throw new Error(data.msg || 'Failed to create channel');
             }
             const newChannelData = await response.json();
-             // Ensure ID consistency
-            const normalizedChannel = { ...newChannelData, id: newChannelData.id || newChannelData._id };
-
-            // IMPORTANT: Let the WebSocket 'channelCreated' event handle adding the channel
-            // to state to avoid race conditions/duplicates. Just return the ID.
-            console.log("Channel creation initiated via API, awaiting WebSocket confirmation:", normalizedChannel);
-            // Optionally, immediately switch to the new channel optimisticallly
+            const normalizedChannel = { ...newChannelData, id: newChannelData.id || newChannelData._id }; // Normalize ID
+            console.log("[API CreateChannel] Success via API, awaiting WebSocket confirmation:", normalizedChannel);
+            // Let the WebSocket 'channelCreated' event handle adding the channel to state.
+            // Optionally, immediately switch to the new channel optimistically:
             // setCurrentChat(normalizedChannel.id);
-            return normalizedChannel.id;
+            return normalizedChannel.id; // Return ID for potential immediate navigation
         } catch (error) {
-            console.error('Error creating channel:', error);
+            console.error('[API CreateChannel] Error:', error);
             setError(error.message); // Set error state
             throw error; // Re-throw for the calling component
         }
@@ -251,21 +315,21 @@ export function MessagesProvider({ children }) {
     const deleteChannel = async (channelId) => {
         if (!currentUser) throw new Error("User not logged in");
         try {
-            console.log(`Sending DELETE request to: /api/channel/${channelId}`);
+            setError(null);
+            console.log(`[API DeleteChannel] Sending DELETE to /api/channel/${channelId}`);
             const response = await fetch(`/api/channel/${channelId}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });
             if (!response.ok) {
                 const data = await response.json();
+                console.error('[API DeleteChannel] Failed:', response.status, data);
                 throw new Error(data.msg || 'Failed to delete channel');
             }
-            // IMPORTANT: Let the WebSocket 'channelDeleted' event handle removing the channel
-            // and messages from state, and switching currentChat if necessary.
-            console.log("Channel deletion initiated via API, awaiting WebSocket confirmation:", channelId);
-            setError(null);
+            console.log("[API DeleteChannel] Success via API, awaiting WebSocket confirmation:", channelId);
+            // Let the WebSocket 'channelDeleted' event handle state updates (removing channel, messages, switching chat).
         } catch (error) {
-            console.error('Error deleting channel:', error);
+            console.error('[API DeleteChannel] Error:', error);
             setError(error.message);
             throw error;
         }
@@ -275,7 +339,8 @@ export function MessagesProvider({ children }) {
         if (!currentUser) throw new Error("User not logged in");
         if (!channelId || !content.trim()) throw new Error("Invalid channel or message content");
         try {
-            console.log(`Sending POST request to: /api/messages/${channelId}`);
+            setError(null);
+            console.log(`[API SendMessage] Sending POST to /api/messages/${channelId}`);
             const response = await fetch(`/api/messages/${channelId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -284,22 +349,14 @@ export function MessagesProvider({ children }) {
             });
             if (!response.ok) {
                 const data = await response.json();
+                console.error('[API SendMessage] Failed:', response.status, data);
                 throw new Error(data.msg || 'Failed to send message');
             }
-            // IMPORTANT: Let the WebSocket 'newMessage' event handle adding the message
-            // to the state to avoid duplicates if the server broadcasts it back.
-            // const newMessageData = await response.json();
-            console.log("Message sent via API, awaiting WebSocket confirmation for channel:", channelId);
-            setError(null);
-            // Optional: Optimistic update (add message immediately, maybe with a 'sending' state)
-            // const optimisticMessage = { id: Date.now(), content, userId: currentUser, timestamp: new Date().toISOString(), status: 'sending' }; // Example
-            // setMessages(prev => ({
-            //     ...prev,
-            //     [channelId]: [...(prev[channelId] || []), optimisticMessage],
-            // }));
-
+            console.log("[API SendMessage] Success via API, awaiting WebSocket confirmation for channel:", channelId);
+            // Let the WebSocket 'newMessage' event handle adding the message to state.
+            // No optimistic update shown here, but could be added if desired.
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('[API SendMessage] Error:', error);
             setError(error.message);
             throw error;
         }
@@ -308,9 +365,9 @@ export function MessagesProvider({ children }) {
     // --- Context Provider Value ---
     const value = {
         currentChat,
-        setCurrentChat, // Allow components to change the chat
-        messages,       // The object containing messages per channel
-        channels,       // The list of channels
+        setCurrentChat,
+        messages,
+        channels,
         createChannel,
         deleteChannel,
         sendMessage,

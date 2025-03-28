@@ -2,3 +2,4 @@ mongoConfig.json
 node_modules/
 service/mongoConfig.json
 service/data.txt
+.env.production
