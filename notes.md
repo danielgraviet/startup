@@ -64,8 +64,6 @@ CatNip Messaging Website
     - Hyperlink to reset password. 
 - CSS
     - incorporate cat themes throughout
-    - Buttons that “purr” (vibrate) on hover. 
-    - Cursor is a paw icon. 
     - Cat inspired colors, warm tones, furr colors. 
 - JavaScript
     - On login, show a random cat fact, or cat gif. Use The Cat API.

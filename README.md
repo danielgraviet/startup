@@ -158,8 +158,8 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [X] **Backend listens for WebSocket connection** - My backend listens for websocket connections for creating/deleting channels and sending messages. 
+- [X] **Frontend makes WebSocket connection** - Front end makes a websocket connection for creating a new channel, and sending messages within that channel. 
+- [X] **Data sent over WebSocket connection** - Messages and Channel creation are sent over websockets for instant updates to all connected clients. 
+- [X] **WebSocket data displayed** - Websocket data like messages and channel creation are displayed on the UI through websockets instantly and without a client refresh. 
+- [X] **Application is fully functional** - Application is fully function, and can work as a light weight messaging platform that supports different channels. 
